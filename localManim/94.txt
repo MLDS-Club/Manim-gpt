@@ -1,0 +1,21 @@
+
+
+moving_camera¶
+A camera able to move through a scene.
+
+See also
+\`\`\`moving_camera_scene\`\`\`
+
+
+
+Classes
+
+
+
+\`\`\`MovingCamera\`\`\`
+Stays in line with the height, width and position of it's 'frame', which is a Rectangle
+
+
+
+
+

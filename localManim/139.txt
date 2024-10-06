@@ -1,0 +1,23 @@
+
+
+vector_field¶
+Mobjects representing vector fields.
+
+
+Classes
+
+
+
+\`\`\`ArrowVectorField\`\`\`
+A \`\`\`VectorField\`\`\` represented by a set of change vectors.
+
+\`\`\`StreamLines\`\`\`
+StreamLines represent the flow of a \`\`\`VectorField\`\`\` using the trace of moving agents.
+
+\`\`\`VectorField\`\`\`
+A vector field.
+
+
+
+
+

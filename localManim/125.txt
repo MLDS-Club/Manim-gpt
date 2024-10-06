@@ -1,0 +1,22 @@
+
+
+svg¶
+Mobjects related to SVG images.
+
+Modules¶
+
+
+
+\`\`\`brace\`\`\`
+Mobject representing curly braces.
+
+\`\`\`svg_mobject\`\`\`
+Mobjects generated from an SVG file.
+
+
+
+
+
+
+
+

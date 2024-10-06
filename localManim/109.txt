@@ -1,0 +1,42 @@
+
+
+graph¶
+Mobjects used to represent mathematical graphs (think graph theory, not plotting).
+
+
+Type Aliases
+
+
+
+
+
+\`\`\`class\`\`\` \`\`\`NxGraph\`\`\`¶
+\`\`\`nx.classes.graph.Graph | nx.classes.digraph.DiGraph\`\`\`
+
+
+
+
+
+
+
+
+Classes
+
+
+
+\`\`\`DiGraph\`\`\`
+A directed graph.
+
+\`\`\`GenericGraph\`\`\`
+Abstract base class for graphs (that is, a collection of vertices connected with edges).
+
+\`\`\`Graph\`\`\`
+An undirected graph (vertices connected with edges).
+
+\`\`\`LayoutFunction\`\`\`
+A protocol for automatic layout functions that compute a layout for a graph to be used in \`\`\`change_layout()\`\`\`.
+
+
+
+
+

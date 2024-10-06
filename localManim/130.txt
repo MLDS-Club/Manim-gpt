@@ -1,0 +1,105 @@
+
+
+MobjectTable¶
+Qualified name: \`\`\`manim.mobject.table.MobjectTable\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`MobjectTable\`\`\`(\`\`\`table\`\`\`, \`\`\`element_to_mobject=<function\`\`\` \`\`\`MobjectTable.<lambda>>\`\`\`, \`\`\`**kwargs\`\`\`)¶
+Bases: \`\`\`Table\`\`\`
+A specialized \`\`\`Table\`\`\` mobject for use with \`\`\`Mobject\`\`\`.
+Examples
+
+Example: MobjectTableExample ¶
+\`\`\`from manim import *
+
+class MobjectTableExample(Scene):
+    def construct(self):
+        cross = VGroup(
+            Line(UP + LEFT, DOWN + RIGHT),
+            Line(UP + RIGHT, DOWN + LEFT),
+        )
+        a = Circle().set_color(RED).scale(0.5)
+        b = cross.set_color(BLUE).scale(0.5)
+        t0 = MobjectTable(
+            [[a.copy(),b.copy(),a.copy()],
+            [b.copy(),a.copy(),a.copy()],
+            [a.copy(),b.copy(),b.copy()]]
+        )
+        line = Line(
+            t0.get_corner(DL), t0.get_corner(UR)
+        ).set_color(RED)
+        self.add(t0, line)\`\`\`
+
+
+Special case of \`\`\`Table\`\`\` with \`\`\`element_to_mobject\`\`\` set to an identity function.
+Here, every item in \`\`\`table\`\`\` must already be of type \`\`\`Mobject\`\`\`.
+
+Parameters:
+
+table (Iterable[Iterable[VMobject]]) – A 2D array or list of lists. Content of the table must be of type \`\`\`Mobject\`\`\`.
+element_to_mobject (Callable[[VMobject], VMobject]) – The \`\`\`Mobject\`\`\` class applied to the table entries. Set as \`\`\`lambda\`\`\` \`\`\`m\`\`\` \`\`\`:\`\`\` \`\`\`m\`\`\` to return itself.
+kwargs – Additional arguments to be passed to \`\`\`Table\`\`\`.
+
+
+
+Methods
+
+
+
+
+
+
+Attributes
+
+
+
+\`\`\`animate\`\`\`
+Used to animate the application of any method of \`\`\`self\`\`\`.
+
+\`\`\`animation_overrides\`\`\`
+
+
+\`\`\`color\`\`\`
+
+
+\`\`\`depth\`\`\`
+The depth of the mobject.
+
+\`\`\`fill_color\`\`\`
+If there are multiple colors (for gradient) this returns the first one
+
+\`\`\`height\`\`\`
+The height of the mobject.
+
+\`\`\`n_points_per_curve\`\`\`
+
+
+\`\`\`sheen_factor\`\`\`
+
+
+\`\`\`stroke_color\`\`\`
+
+
+\`\`\`width\`\`\`
+The width of the mobject.
+
+
+
+
+
+
+\`\`\`_original__init__\`\`\`(\`\`\`table\`\`\`, \`\`\`element_to_mobject=<function\`\`\` \`\`\`MobjectTable.<lambda>>\`\`\`, \`\`\`**kwargs\`\`\`)¶
+Special case of \`\`\`Table\`\`\` with \`\`\`element_to_mobject\`\`\` set to an identity function.
+Here, every item in \`\`\`table\`\`\` must already be of type \`\`\`Mobject\`\`\`.
+
+Parameters:
+
+table (Iterable[Iterable[VMobject]]) – A 2D array or list of lists. Content of the table must be of type \`\`\`Mobject\`\`\`.
+element_to_mobject (Callable[[VMobject], VMobject]) – The \`\`\`Mobject\`\`\` class applied to the table entries. Set as \`\`\`lambda\`\`\` \`\`\`m\`\`\` \`\`\`:\`\`\` \`\`\`m\`\`\` to return itself.
+kwargs – Additional arguments to be passed to \`\`\`Table\`\`\`.
+
+
+
+
+
+

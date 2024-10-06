@@ -1,0 +1,20 @@
+
+
+rotation¶
+Animations related to rotation.
+
+
+Classes
+
+
+
+\`\`\`Rotate\`\`\`
+Animation that rotates a Mobject.
+
+\`\`\`Rotating\`\`\`
+
+
+
+
+
+

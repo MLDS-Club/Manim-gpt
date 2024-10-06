@@ -1,0 +1,17 @@
+
+
+logo¶
+Utilities for Manim’s logo and banner.
+
+
+Classes
+
+
+
+\`\`\`ManimBanner\`\`\`
+Convenience class representing Manim's banner.
+
+
+
+
+

@@ -1,0 +1,23 @@
+
+
+mapping_camera¶
+A camera that allows mapping between objects.
+
+
+Classes
+
+
+
+\`\`\`MappingCamera\`\`\`
+Camera object that allows mapping between objects.
+
+\`\`\`OldMultiCamera\`\`\`
+
+
+\`\`\`SplitScreenCamera\`\`\`
+
+
+
+
+
+

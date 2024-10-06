@@ -1,0 +1,53 @@
+
+
+ApplyWave¶
+Qualified name: \`\`\`manim.animation.indication.ApplyWave\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ApplyWave\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Homotopy\`\`\`
+Send a wave through the Mobject distorting it temporarily.
+
+Parameters:
+
+mobject (Mobject) – The mobject to be distorted.
+direction (ndarray) – The direction in which the wave nudges points of the shape
+amplitude (float) – The distance points of the shape get shifted
+wave_func (Callable[[float], float]) – The function defining the shape of one wave flank.
+time_width (float) – The length of the wave relative to the width of the mobject.
+ripples (int) – The number of ripples of the wave
+run_time (float) – The duration of the animation.
+
+
+
+Examples
+
+Example: ApplyingWaves ¶
+\`\`\`from manim import *
+
+class ApplyingWaves(Scene):
+    def construct(self):
+        tex = Tex("WaveWaveWaveWaveWave").scale(2)
+        self.play(ApplyWave(tex))
+        self.play(ApplyWave(
+            tex,
+            direction=RIGHT,
+            time_width=0.5,
+            amplitude=0.3
+        ))
+        self.play(ApplyWave(
+            tex,
+            rate_func=linear,
+            ripples=4
+        ))\`\`\`
+
+
+Methods
+
+
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+
+
+ChangeDecimalToValue¶
+Qualified name: \`\`\`manim.animation.numbers.ChangeDecimalToValue\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ChangeDecimalToValue\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`ChangingDecimal\`\`\`
+Methods
+
+
+
+
+
+
+
+Parameters:
+
+decimal_mob (DecimalNumber)
+target_number (int)
+
+
+
+
+

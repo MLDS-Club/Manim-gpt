@@ -1,0 +1,42 @@
+
+
+Homotopy¶
+Qualified name: \`\`\`manim.animation.movement.Homotopy\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`Homotopy\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Animation\`\`\`
+A Homotopy.
+This is an animation transforming the points of a mobject according
+to the specified transformation function. With the parameter \(t\)
+moving from 0 to 1 throughout the animation and \((x, y, z)\)
+describing the coordinates of the point of a mobject,
+the function passed to the \`\`\`homotopy\`\`\` keyword argument should
+transform the tuple \((x, y, z, t)\) to \((x', y', z')\),
+the coordinates the original point is transformed to at time \(t\).
+
+Parameters:
+
+homotopy (Callable[[float, float, float, float], tuple[float, float, float]]) – A function mapping \((x, y, z, t)\) to \((x', y', z')\).
+mobject (Mobject) – The mobject transformed under the given homotopy.
+run_time (float) – The run time of the animation.
+apply_function_kwargs (dict[str, Any] | None) – Keyword arguments propagated to \`\`\`Mobject.apply_function()\`\`\`.
+kwargs – Further keyword arguments passed to the parent class.
+
+
+
+Methods
+
+
+
+\`\`\`function_at_time_t\`\`\`
+
+
+\`\`\`interpolate_submobject\`\`\`
+
+
+
+
+
+
+

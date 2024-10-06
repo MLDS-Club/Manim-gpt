@@ -1,0 +1,20 @@
+
+
+frame¶
+Special rectangles.
+
+
+Classes
+
+
+
+\`\`\`FullScreenRectangle\`\`\`
+
+
+\`\`\`ScreenRectangle\`\`\`
+
+
+
+
+
+

@@ -1,0 +1,61 @@
+
+
+images¶
+Image manipulation utilities.
+
+
+Functions
+
+
+\`\`\`change_to_rgba_array\`\`\`(\`\`\`image\`\`\`, \`\`\`dtype\`\`\`\`\`\`=\`\`\`\`\`\`'uint8'\`\`\`)¶
+Converts an RGB array into RGBA with the alpha value opacity maxed.
+
+
+
+\`\`\`drag_pixels\`\`\`(\`\`\`frames\`\`\`)¶
+
+Parameters:
+frames (list[array])
+
+Return type:
+list[array]
+
+
+
+
+
+\`\`\`get_full_raster_image_path\`\`\`(\`\`\`image_file_name\`\`\`)¶
+
+Parameters:
+image_file_name (str)
+
+Return type:
+Path
+
+
+
+
+
+\`\`\`get_full_vector_image_path\`\`\`(\`\`\`image_file_name\`\`\`)¶
+
+Parameters:
+image_file_name (str)
+
+Return type:
+Path
+
+
+
+
+
+\`\`\`invert_image\`\`\`(\`\`\`image\`\`\`)¶
+
+Parameters:
+image (array)
+
+Return type:
+Image
+
+
+
+

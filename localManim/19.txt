@@ -1,0 +1,33 @@
+
+
+ShowPartial¶
+Qualified name: \`\`\`manim.animation.creation.ShowPartial\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ShowPartial\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Animation\`\`\`
+Abstract class for Animations that show the VMobject partially.
+
+Raises:
+TypeError – If \`\`\`mobject\`\`\` is not an instance of \`\`\`VMobject\`\`\`.
+
+Parameters:
+mobject (VMobject | OpenGLVMobject | OpenGLSurface | None)
+
+
+
+See also
+\`\`\`Create\`\`\`, \`\`\`ShowPassingFlash\`\`\`
+
+Methods
+
+
+
+\`\`\`interpolate_submobject\`\`\`
+
+
+
+
+
+
+

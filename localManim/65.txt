@@ -1,0 +1,54 @@
+
+
+ApplyPointwiseFunctionToCenter¶
+Qualified name: \`\`\`manim.animation.transform.ApplyPointwiseFunctionToCenter\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ApplyPointwiseFunctionToCenter\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`ApplyPointwiseFunction\`\`\`
+Methods
+
+
+
+\`\`\`begin\`\`\`
+Begin the animation.
+
+
+
+
+Attributes
+
+
+
+\`\`\`path_arc\`\`\`
+
+
+\`\`\`path_func\`\`\`
+
+
+
+
+
+
+Parameters:
+
+function (types.MethodType)
+mobject (Mobject)
+
+
+
+
+
+\`\`\`begin\`\`\`()¶
+Begin the animation.
+This method is called right as an animation is being played. As much
+initialization as possible, especially any mobject copying, should live in this
+method.
+
+Return type:
+None
+
+
+
+
+

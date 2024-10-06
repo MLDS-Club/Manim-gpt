@@ -1,0 +1,55 @@
+
+
+Animations¶
+
+
+
+\`\`\`animation\`\`\`
+Animate mobjects.
+
+\`\`\`changing\`\`\`
+Animation of a mobject boundary and tracing of points.
+
+\`\`\`composition\`\`\`
+Tools for displaying multiple animations at once.
+
+\`\`\`creation\`\`\`
+Animate the display or removal of a mobject from a scene.
+
+\`\`\`fading\`\`\`
+Fading in and out of view.
+
+\`\`\`growing\`\`\`
+Animations that introduce mobjects to scene by growing them from points.
+
+\`\`\`indication\`\`\`
+Animations drawing attention to particular mobjects.
+
+\`\`\`movement\`\`\`
+Animations related to movement.
+
+\`\`\`numbers\`\`\`
+Animations for changing numbers.
+
+\`\`\`rotation\`\`\`
+Animations related to rotation.
+
+\`\`\`specialized\`\`\`
+
+
+\`\`\`speedmodifier\`\`\`
+Utilities for modifying the speed at which animations are played.
+
+\`\`\`transform\`\`\`
+Animations transforming one mobject into another.
+
+\`\`\`transform_matching_parts\`\`\`
+Animations that try to transform Mobjects while keeping track of identical parts.
+
+\`\`\`updaters\`\`\`
+Animations and utility mobjects related to update functions.
+
+
+
+
+

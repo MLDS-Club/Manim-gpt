@@ -1,0 +1,26 @@
+
+
+composition¶
+Tools for displaying multiple animations at once.
+
+
+Classes
+
+
+
+\`\`\`AnimationGroup\`\`\`
+Plays a group or series of \`\`\`Animation\`\`\`.
+
+\`\`\`LaggedStart\`\`\`
+Adjusts the timing of a series of \`\`\`Animation\`\`\` according to \`\`\`lag_ratio\`\`\`.
+
+\`\`\`LaggedStartMap\`\`\`
+Plays a series of \`\`\`Animation\`\`\` while mapping a function to submobjects.
+
+\`\`\`Succession\`\`\`
+Plays a series of animations in succession.
+
+
+
+
+

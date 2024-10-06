@@ -1,0 +1,51 @@
+
+
+creation¶
+Animate the display or removal of a mobject from a scene.
+
+
+
+Classes
+
+
+
+\`\`\`AddTextLetterByLetter\`\`\`
+Show a \`\`\`Text\`\`\` letter by letter on the scene.
+
+\`\`\`AddTextWordByWord\`\`\`
+Show a \`\`\`Text\`\`\` word by word on the scene.
+
+\`\`\`Create\`\`\`
+Incrementally show a VMobject.
+
+\`\`\`DrawBorderThenFill\`\`\`
+Draw the border first and then show the fill.
+
+\`\`\`RemoveTextLetterByLetter\`\`\`
+Remove a \`\`\`Text\`\`\` letter by letter from the scene.
+
+\`\`\`ShowIncreasingSubsets\`\`\`
+Show one submobject at a time, leaving all previous ones displayed on screen.
+
+\`\`\`ShowPartial\`\`\`
+Abstract class for Animations that show the VMobject partially.
+
+\`\`\`ShowSubmobjectsOneByOne\`\`\`
+Show one submobject at a time, removing all previously displayed ones from screen.
+
+\`\`\`SpiralIn\`\`\`
+Create the Mobject with sub-Mobjects flying in on spiral trajectories.
+
+\`\`\`Uncreate\`\`\`
+Like \`\`\`Create\`\`\` but in reverse.
+
+\`\`\`Unwrite\`\`\`
+Simulate erasing by hand a \`\`\`Text\`\`\` or a \`\`\`VMobject\`\`\`.
+
+\`\`\`Write\`\`\`
+Simulate hand-writing a \`\`\`Text\`\`\` or hand-drawing a \`\`\`VMobject\`\`\`.
+
+
+
+
+

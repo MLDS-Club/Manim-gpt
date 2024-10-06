@@ -1,0 +1,20 @@
+
+
+scene¶
+Basic canvas for animations.
+
+
+Classes
+
+
+
+\`\`\`RerunSceneHandler\`\`\`
+A class to handle rerunning a Scene after the input file is modified.
+
+\`\`\`Scene\`\`\`
+A Scene is the canvas of your animation.
+
+
+
+
+

@@ -1,0 +1,25 @@
+
+
+Cameras¶
+
+
+
+\`\`\`camera\`\`\`
+A camera converts the mobjects contained in a Scene into an array of pixels.
+
+\`\`\`mapping_camera\`\`\`
+A camera that allows mapping between objects.
+
+\`\`\`moving_camera\`\`\`
+A camera able to move through a scene.
+
+\`\`\`multi_camera\`\`\`
+A camera supporting multiple perspectives.
+
+\`\`\`three_d_camera\`\`\`
+A camera that can be positioned and oriented in three-dimensional space.
+
+
+
+
+

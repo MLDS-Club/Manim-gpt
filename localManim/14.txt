@@ -1,0 +1,27 @@
+
+
+AddTextWordByWord¶
+Qualified name: \`\`\`manim.animation.creation.AddTextWordByWord\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`AddTextWordByWord\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Succession\`\`\`
+Show a \`\`\`Text\`\`\` word by word on the scene. Note: currently broken.
+Methods
+
+
+
+
+
+
+
+Parameters:
+
+text_mobject (Text)
+run_time (float)
+time_per_char (float)
+
+
+
+
+

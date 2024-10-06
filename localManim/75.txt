@@ -1,0 +1,49 @@
+
+
+ScaleInPlace¶
+Qualified name: \`\`\`manim.animation.transform.ScaleInPlace\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ScaleInPlace\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`ApplyMethod\`\`\`
+Animation that scales a mobject by a certain factor.
+Examples
+
+Example: ScaleInPlaceExample ¶
+\`\`\`from manim import *
+
+class ScaleInPlaceExample(Scene):
+    def construct(self):
+        self.play(ScaleInPlace(Text("Hello World!"), 2))\`\`\`
+
+
+Methods
+
+
+
+
+
+
+Attributes
+
+
+
+\`\`\`path_arc\`\`\`
+
+
+\`\`\`path_func\`\`\`
+
+
+
+
+
+
+Parameters:
+
+mobject (Mobject)
+scale_factor (float)
+
+
+
+
+

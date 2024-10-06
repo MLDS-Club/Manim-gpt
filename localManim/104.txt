@@ -1,0 +1,55 @@
+
+
+Mobjects¶
+
+
+
+\`\`\`frame\`\`\`
+Special rectangles.
+
+\`\`\`geometry\`\`\`
+Various geometric Mobjects.
+
+\`\`\`graph\`\`\`
+Mobjects used to represent mathematical graphs (think graph theory, not plotting).
+
+\`\`\`graphing\`\`\`
+Coordinate systems and function graphing related mobjects.
+
+\`\`\`logo\`\`\`
+Utilities for Manim's logo and banner.
+
+\`\`\`matrix\`\`\`
+Mobjects representing matrices.
+
+\`\`\`mobject\`\`\`
+Base classes for objects that can be displayed.
+
+\`\`\`svg\`\`\`
+Mobjects related to SVG images.
+
+\`\`\`table\`\`\`
+Mobjects representing tables.
+
+\`\`\`text\`\`\`
+Mobjects used to display Text using Pango or LaTeX.
+
+\`\`\`three_d\`\`\`
+Three-dimensional mobjects.
+
+\`\`\`types\`\`\`
+Specialized mobject base classes.
+
+\`\`\`utils\`\`\`
+Utilities for working with mobjects.
+
+\`\`\`value_tracker\`\`\`
+Simple mobjects that can be used for storing (and updating) a value.
+
+\`\`\`vector_field\`\`\`
+Mobjects representing vector fields.
+
+
+
+
+

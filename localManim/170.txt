@@ -1,0 +1,31 @@
+
+
+docbuild¶
+Utilities for building the Manim documentation.
+For more information about the Manim documentation building, see:
+
+Manim Development Process, specifically the \`\`\`Documentation\`\`\`
+bullet point under Polishing Changes and Submitting a Pull Request
+Adding Documentation
+
+
+
+
+\`\`\`autoaliasattr_directive\`\`\`
+A directive for documenting type aliases and other module-level attributes.
+
+\`\`\`autocolor_directive\`\`\`
+A directive for documenting colors in Manim.
+
+\`\`\`manim_directive\`\`\`
+A directive for including Manim videos in a Sphinx document
+
+\`\`\`module_parsing\`\`\`
+Read and parse all the Manim modules and extract documentation from them.
+
+
+
+
+
+
+

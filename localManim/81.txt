@@ -1,0 +1,23 @@
+
+
+transform_matching_parts¶
+Animations that try to transform Mobjects while keeping track of identical parts.
+
+
+Classes
+
+
+
+\`\`\`TransformMatchingAbstractBase\`\`\`
+Abstract base class for transformations that keep track of matching parts.
+
+\`\`\`TransformMatchingShapes\`\`\`
+An animation trying to transform groups by matching the shape of their submobjects.
+
+\`\`\`TransformMatchingTex\`\`\`
+A transformation trying to transform rendered LaTeX strings.
+
+
+
+
+

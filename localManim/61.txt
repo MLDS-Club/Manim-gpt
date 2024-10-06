@@ -1,0 +1,41 @@
+
+
+ApplyFunction¶
+Qualified name: \`\`\`manim.animation.transform.ApplyFunction\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ApplyFunction\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Transform\`\`\`
+Methods
+
+
+
+\`\`\`create_target\`\`\`
+
+
+
+
+
+Attributes
+
+
+
+\`\`\`path_arc\`\`\`
+
+
+\`\`\`path_func\`\`\`
+
+
+
+
+
+
+Parameters:
+
+function (types.MethodType)
+mobject (Mobject)
+
+
+
+
+

@@ -1,0 +1,86 @@
+
+
+Write¶
+Qualified name: \`\`\`manim.animation.creation.Write\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`Write\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`DrawBorderThenFill\`\`\`
+Simulate hand-writing a \`\`\`Text\`\`\` or hand-drawing a \`\`\`VMobject\`\`\`.
+Examples
+
+Example: ShowWrite ¶
+\`\`\`from manim import *
+
+class ShowWrite(Scene):
+    def construct(self):
+        self.play(Write(Text("Hello", font_size=144)))\`\`\`
+
+
+
+Example: ShowWriteReversed ¶
+\`\`\`from manim import *
+
+class ShowWriteReversed(Scene):
+    def construct(self):
+        self.play(Write(Text("Hello", font_size=144), reverse=True, remover=False))\`\`\`
+
+
+Tests
+Check that creating empty \`\`\`Write\`\`\` animations works:
+\`\`\`>>> from manim import Write, Text
+>>> Write(Text(''))
+Write(Text(''))\`\`\`
+
+
+Methods
+
+
+
+\`\`\`begin\`\`\`
+Begin the animation.
+
+\`\`\`finish\`\`\`
+Finish the animation.
+
+\`\`\`reverse_submobjects\`\`\`
+
+
+
+
+
+
+Parameters:
+
+vmobject (VMobject | OpenGLVMobject)
+rate_func (Callable[[float], float])
+reverse (bool)
+
+
+
+
+
+\`\`\`begin\`\`\`()¶
+Begin the animation.
+This method is called right as an animation is being played. As much
+initialization as possible, especially any mobject copying, should live in this
+method.
+
+Return type:
+None
+
+
+
+
+
+\`\`\`finish\`\`\`()¶
+Finish the animation.
+This method gets called when the animation is over.
+
+Return type:
+None
+
+
+
+
+

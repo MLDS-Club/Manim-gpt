@@ -1,0 +1,36 @@
+
+
+commands¶
+
+
+Functions
+
+
+\`\`\`capture\`\`\`(\`\`\`command\`\`\`, \`\`\`cwd\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`command_input\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`)¶
+
+
+
+\`\`\`get_dir_layout\`\`\`(\`\`\`dirpath\`\`\`)¶
+Get list of paths relative to dirpath of all files in dir and subdirs recursively.
+
+Parameters:
+dirpath (Path)
+
+Return type:
+Generator[str, None, None]
+
+
+
+
+
+\`\`\`get_video_metadata\`\`\`(\`\`\`path_to_video\`\`\`)¶
+
+Parameters:
+path_to_video (str | PathLike)
+
+Return type:
+dict[str]
+
+
+
+

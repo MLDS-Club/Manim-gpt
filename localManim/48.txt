@@ -1,0 +1,30 @@
+
+
+SmoothedVectorizedHomotopy¶
+Qualified name: \`\`\`manim.animation.movement.SmoothedVectorizedHomotopy\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`SmoothedVectorizedHomotopy\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Homotopy\`\`\`
+Methods
+
+
+
+\`\`\`interpolate_submobject\`\`\`
+
+
+
+
+
+
+Parameters:
+
+homotopy (Callable[[float, float, float, float], tuple[float, float, float]])
+mobject (Mobject)
+run_time (float)
+apply_function_kwargs (dict[str, Any] | None)
+
+
+
+
+

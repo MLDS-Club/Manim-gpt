@@ -1,0 +1,37 @@
+
+
+geometry¶
+Various geometric Mobjects.
+
+Modules¶
+
+
+
+\`\`\`arc\`\`\`
+Mobjects that are curved.
+
+\`\`\`boolean_ops\`\`\`
+Boolean operations for two-dimensional mobjects.
+
+\`\`\`labeled\`\`\`
+Mobjects that inherit from lines and contain a label along the length.
+
+\`\`\`line\`\`\`
+Mobjects that are lines or variations of them.
+
+\`\`\`polygram\`\`\`
+Mobjects that are simple geometric shapes.
+
+\`\`\`shape_matchers\`\`\`
+Mobjects used to mark and annotate other mobjects.
+
+\`\`\`tips\`\`\`
+A collection of tip mobjects for use with \`\`\`TipableVMobject\`\`\`.
+
+
+
+
+
+
+
+

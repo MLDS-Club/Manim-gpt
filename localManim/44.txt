@@ -1,0 +1,26 @@
+
+
+ComplexHomotopy¶
+Qualified name: \`\`\`manim.animation.movement.ComplexHomotopy\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ComplexHomotopy\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Homotopy\`\`\`
+Complex Homotopy a function Cx[0, 1] to C
+Methods
+
+
+
+
+
+
+
+Parameters:
+
+complex_homotopy (Callable[[complex], float])
+mobject (Mobject)
+
+
+
+
+

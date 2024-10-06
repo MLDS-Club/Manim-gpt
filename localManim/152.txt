@@ -1,0 +1,17 @@
+
+
+scene_file_writer¶
+The interface between scenes and ffmpeg.
+
+
+Classes
+
+
+
+\`\`\`SceneFileWriter\`\`\`
+SceneFileWriter is the object that actually writes the animations played, into video files, using FFMPEG.
+
+
+
+
+

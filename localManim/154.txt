@@ -1,0 +1,20 @@
+
+
+three_d_scene¶
+A scene suitable for rendering three-dimensional objects and animations.
+
+
+Classes
+
+
+
+\`\`\`SpecialThreeDScene\`\`\`
+An extension of \`\`\`ThreeDScene\`\`\` with more settings.
+
+\`\`\`ThreeDScene\`\`\`
+This is a Scene, with special configurations and properties that make it suitable for Three Dimensional Scenes.
+
+
+
+
+

@@ -1,0 +1,38 @@
+
+
+Swap¶
+Qualified name: \`\`\`manim.animation.transform.Swap\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`Swap\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`CyclicReplace\`\`\`
+Methods
+
+
+
+
+
+
+Attributes
+
+
+
+\`\`\`path_arc\`\`\`
+
+
+\`\`\`path_func\`\`\`
+
+
+
+
+
+
+Parameters:
+
+mobjects (Mobject)
+path_arc (float)
+
+
+
+
+

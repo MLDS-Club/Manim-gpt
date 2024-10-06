@@ -1,0 +1,380 @@
+
+
+bezier¶
+Utility functions related to Bézier curves.
+
+
+Functions
+
+
+\`\`\`bezier\`\`\`(\`\`\`points\`\`\`)¶
+Classic implementation of a bezier curve.
+
+Parameters:
+points (Sequence[Point3D] | Point3D_Array) – points defining the desired bezier curve.
+
+Returns:
+
+function describing the bezier curve.
+You can pass a t value between 0 and 1 to get the corresponding point on the curve.
+
+
+Return type:
+Callable[[float], Point3D]
+
+
+
+
+
+\`\`\`diag_to_matrix\`\`\`(\`\`\`l_and_u\`\`\`, \`\`\`diag\`\`\`)¶
+Converts array whose rows represent diagonal
+entries of a matrix into the matrix itself.
+See scipy.linalg.solve_banded
+
+Parameters:
+
+l_and_u (tuple[int, int])
+diag (ndarray[Any, dtype[Any]])
+
+
+Return type:
+ndarray[Any, dtype[Any]]
+
+
+
+
+
+\`\`\`get_quadratic_approximation_of_cubic\`\`\`(\`\`\`a0\`\`\`, \`\`\`h0\`\`\`, \`\`\`h1\`\`\`, \`\`\`a1\`\`\`)¶
+
+Parameters:
+
+a0 (Point3D)
+h0 (Point3D)
+h1 (Point3D)
+a1 (Point3D)
+
+
+Return type:
+BezierPoints
+
+
+
+
+
+\`\`\`get_smooth_cubic_bezier_handle_points\`\`\`(\`\`\`points\`\`\`)¶
+
+Parameters:
+points (Point3D_Array)
+
+Return type:
+tuple[BezierPoints, BezierPoints]
+
+
+
+
+
+\`\`\`get_smooth_handle_points\`\`\`(\`\`\`points\`\`\`)¶
+Given some anchors (points), compute handles so the resulting bezier curve is smooth.
+
+Parameters:
+points (BezierPoints) – Anchors.
+
+Returns:
+Computed handles.
+
+Return type:
+Tuple[np.ndarray, np.ndarray]
+
+
+
+
+
+\`\`\`integer_interpolate\`\`\`(\`\`\`start\`\`\`, \`\`\`end\`\`\`, \`\`\`alpha\`\`\`)¶
+This is a variant of interpolate that returns an integer and the residual
+
+Parameters:
+
+start (float) – The start of the range
+end (float) – The end of the range
+alpha (float) – a float between 0 and 1.
+
+
+Returns:
+This returns an integer between start and end (inclusive) representing
+appropriate interpolation between them, along with a
+“residue” representing a new proportion between the
+returned integer and the next one of the
+list.
+
+Return type:
+tuple[int, float]
+
+
+Example
+\`\`\`>>> integer, residue = integer_interpolate(start=0, end=10, alpha=0.46)
+>>> np.allclose((integer, residue), (4, 0.6))
+True\`\`\`
+
+
+
+
+
+\`\`\`interpolate\`\`\`(\`\`\`start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`alpha\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`) → \`\`\`float\`\`\`¶
+
+\`\`\`interpolate\`\`\`(\`\`\`start\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`, \`\`\`end\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`, \`\`\`alpha\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`) → \`\`\`Point3D\`\`\`
+
+
+
+\`\`\`inverse_interpolate\`\`\`(\`\`\`start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`value\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`) → \`\`\`float\`\`\`¶
+
+\`\`\`inverse_interpolate\`\`\`(\`\`\`start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`value\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`) → \`\`\`Point3D\`\`\`
+
+\`\`\`inverse_interpolate\`\`\`(\`\`\`start\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`, \`\`\`end\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`, \`\`\`value\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`) → \`\`\`Point3D\`\`\`
+Perform inverse interpolation to determine the alpha
+values that would produce the specified \`\`\`value\`\`\`
+given the \`\`\`start\`\`\` and \`\`\`end\`\`\` values or points.
+
+Parameters:
+
+start – The start value or point of the interpolation.
+end – The end value or point of the interpolation.
+value – The value or point for which the alpha value
+should be determined.
+
+
+Returns:
+
+The alpha values producing the given input
+when interpolating between \`\`\`start\`\`\` and \`\`\`end\`\`\`.
+
+
+
+Example
+\`\`\`>>> inverse_interpolate(start=2, end=6, value=4)
+0.5
+
+>>> start = np.array([1, 2, 1])
+>>> end = np.array([7, 8, 11])
+>>> value = np.array([4, 5, 5])
+>>> inverse_interpolate(start, end, value)
+array([0.5, 0.5, 0.4])\`\`\`
+
+
+
+
+
+\`\`\`is_closed\`\`\`(\`\`\`points\`\`\`)¶
+
+Parameters:
+points (Point3D_Array)
+
+Return type:
+bool
+
+
+
+
+
+\`\`\`match_interpolate\`\`\`(\`\`\`new_start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`new_end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`old_start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`old_end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`old_value\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`) → \`\`\`float\`\`\`¶
+
+\`\`\`match_interpolate\`\`\`(\`\`\`new_start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`new_end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`old_start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`old_end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`old_value\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`) → \`\`\`Point3D\`\`\`
+Interpolate a value from an old range to a new range.
+
+Parameters:
+
+new_start – The start of the new range.
+new_end – The end of the new range.
+old_start – The start of the old range.
+old_end – The end of the old range.
+old_value – The value within the old range whose corresponding
+value in the new range (with the same alpha value)
+is desired.
+
+
+Return type:
+The interpolated value within the new range.
+
+
+Examples
+\`\`\`>>> match_interpolate(0, 100, 10, 20, 15)
+50.0\`\`\`
+
+
+
+
+
+\`\`\`mid\`\`\`(\`\`\`start\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`, \`\`\`end\`\`\`\`\`\`:\`\`\` \`\`\`float\`\`\`) → \`\`\`float\`\`\`¶
+
+\`\`\`mid\`\`\`(\`\`\`start\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`, \`\`\`end\`\`\`\`\`\`:\`\`\` \`\`\`Point3D\`\`\`) → \`\`\`Point3D\`\`\`
+Returns the midpoint between two values.
+
+Parameters:
+
+start – The first value
+end – The second value
+
+
+Return type:
+The midpoint between the two values
+
+
+
+
+
+\`\`\`partial_bezier_points\`\`\`(\`\`\`points\`\`\`, \`\`\`a\`\`\`, \`\`\`b\`\`\`)¶
+Given an array of points which define bezier curve, and two numbers 0<=a<b<=1, return an array of the same size,
+which describes the portion of the original bezier curve on the interval [a, b].
+This algorithm is pretty nifty, and pretty dense.
+
+Parameters:
+
+points (BezierPoints) – set of points defining the bezier curve.
+a (float) – lower bound of the desired partial bezier curve.
+b (float) – upper bound of the desired partial bezier curve.
+
+
+Returns:
+Set of points defining the partial bezier curve.
+
+Return type:
+np.ndarray
+
+
+
+
+
+\`\`\`partial_quadratic_bezier_points\`\`\`(\`\`\`points\`\`\`, \`\`\`a\`\`\`, \`\`\`b\`\`\`)¶
+
+Parameters:
+
+points (QuadraticBezierPoints)
+a (float)
+b (float)
+
+
+Return type:
+QuadraticBezierPoints
+
+
+
+
+
+\`\`\`point_lies_on_bezier\`\`\`(\`\`\`point\`\`\`, \`\`\`control_points\`\`\`, \`\`\`round_to\`\`\`\`\`\`=\`\`\`\`\`\`1e-06\`\`\`)¶
+Checks if a given point lies on the bezier curves with the given control points.
+This is done by solving the bezier polynomial with the point as the constant term; if
+any real roots exist, the point lies on the bezier curve.
+
+Parameters:
+
+point (Point3D) – The Cartesian Coordinates of the point to check.
+control_points (BezierPoints) – The Cartesian Coordinates of the ordered control
+points of the bezier curve on which the point may
+or may not lie.
+round_to (float) – A float whose number of decimal places all values
+such as coordinates of points will be rounded.
+
+
+Returns:
+Whether the point lies on the curve.
+
+Return type:
+bool
+
+
+
+
+
+\`\`\`proportions_along_bezier_curve_for_point\`\`\`(\`\`\`point\`\`\`, \`\`\`control_points\`\`\`, \`\`\`round_to\`\`\`\`\`\`=\`\`\`\`\`\`1e-06\`\`\`)¶
+Obtains the proportion along the bezier curve corresponding to a given point
+given the bezier curve’s control points.
+The bezier polynomial is constructed using the coordinates of the given point
+as well as the bezier curve’s control points. On solving the polynomial for each dimension,
+if there are roots common to every dimension, those roots give the proportion along the
+curve the point is at. If there are no real roots, the point does not lie on the curve.
+
+Parameters:
+
+point (Point3D) – The Cartesian Coordinates of the point whose parameter
+should be obtained.
+control_points (BezierPoints) – The Cartesian Coordinates of the ordered control
+points of the bezier curve on which the point may
+or may not lie.
+round_to (float) – A float whose number of decimal places all values
+such as coordinates of points will be rounded.
+
+
+Returns:
+List containing possible parameters (the proportions along the bezier curve)
+for the given point on the given bezier curve.
+This usually only contains one or zero elements, but if the
+point is, say, at the beginning/end of a closed loop, may return
+a list with more than 1 value, corresponding to the beginning and
+end etc. of the loop.
+
+Return type:
+np.ndarray[float]
+
+Raises:
+ValueError – When \`\`\`point\`\`\` and the control points have different shapes.
+
+
+
+
+
+\`\`\`quadratic_bezier_remap\`\`\`(\`\`\`triplets\`\`\`, \`\`\`new_number_of_curves\`\`\`)¶
+Remaps the number of curves to a higher amount by splitting bezier curves
+
+Parameters:
+
+triplets (QuadraticBezierPoints_Array) – The triplets of the quadratic bezier curves to be remapped shape(n, 3, 3)
+new_number_of_curves (int) – The number of curves that the output will contain. This needs to be higher than the current number.
+
+
+Return type:
+The new triplets for the quadratic bezier curves.
+
+
+
+
+
+\`\`\`split_quadratic_bezier\`\`\`(\`\`\`points\`\`\`, \`\`\`t\`\`\`)¶
+Split a quadratic Bézier curve at argument \`\`\`t\`\`\` into two quadratic curves.
+
+Parameters:
+
+points (QuadraticBezierPoints) – The control points of the bezier curve
+has shape \`\`\`[a1,\`\`\` \`\`\`h1,\`\`\` \`\`\`b1]\`\`\`
+t (float) – The \`\`\`t\`\`\`-value at which to split the Bézier curve
+
+
+Returns:
+
+The two Bézier curves as a list of tuples,
+has the shape \`\`\`[a1,\`\`\` \`\`\`h1,\`\`\` \`\`\`b1],\`\`\` \`\`\`[a2,\`\`\` \`\`\`h2,\`\`\` \`\`\`b2]\`\`\`
+
+
+Return type:
+BezierPoints
+
+
+
+
+
+\`\`\`subdivide_quadratic_bezier\`\`\`(\`\`\`points\`\`\`, \`\`\`n\`\`\`)¶
+Subdivide a quadratic Bézier curve into \`\`\`n\`\`\` subcurves which have the same shape.
+The points at which the curve is split are located at the
+arguments \(t = i/n\) for \(i = 1, ..., n-1\).
+
+Parameters:
+
+points (QuadraticBezierPoints) – The control points of the Bézier curve in form \`\`\`[a1,\`\`\` \`\`\`h1,\`\`\` \`\`\`b1]\`\`\`
+n (int) – The number of curves to subdivide the Bézier curve into
+
+
+Return type:
+The new points for the Bézier curve in the form \`\`\`[a1,\`\`\` \`\`\`h1,\`\`\` \`\`\`b1,\`\`\` \`\`\`a2,\`\`\` \`\`\`h2,\`\`\` \`\`\`b2,\`\`\` \`\`\`...]\`\`\`
+
+
+
+
+

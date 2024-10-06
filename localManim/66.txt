@@ -1,0 +1,66 @@
+
+
+ClockwiseTransform¶
+Qualified name: \`\`\`manim.animation.transform.ClockwiseTransform\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ClockwiseTransform\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`Transform\`\`\`
+Transforms the points of a mobject along a clockwise oriented arc.
+
+See also
+\`\`\`Transform\`\`\`, \`\`\`CounterclockwiseTransform\`\`\`
+
+Examples
+
+Example: ClockwiseExample ¶
+\`\`\`from manim import *
+
+class ClockwiseExample(Scene):
+    def construct(self):
+        dl, dr = Dot(), Dot()
+        sl, sr = Square(), Square()
+
+        VGroup(dl, sl).arrange(DOWN).shift(2*LEFT)
+        VGroup(dr, sr).arrange(DOWN).shift(2*RIGHT)
+
+        self.add(dl, dr)
+        self.wait()
+        self.play(
+            ClockwiseTransform(dl, sl),
+            Transform(dr, sr)
+        )
+        self.wait()\`\`\`
+
+
+Methods
+
+
+
+
+
+
+Attributes
+
+
+
+\`\`\`path_arc\`\`\`
+
+
+\`\`\`path_func\`\`\`
+
+
+
+
+
+
+Parameters:
+
+mobject (Mobject)
+target_mobject (Mobject)
+path_arc (float)
+
+
+
+
+

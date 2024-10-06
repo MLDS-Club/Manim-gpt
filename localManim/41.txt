@@ -1,0 +1,17 @@
+
+
+ShowPassingFlashWithThinningStrokeWidth¶
+Qualified name: \`\`\`manim.animation.indication.ShowPassingFlashWithThinningStrokeWidth\`\`\`
+
+
+\`\`\`class\`\`\` \`\`\`ShowPassingFlashWithThinningStrokeWidth\`\`\`(\`\`\`mobject\`\`\`\`\`\`=\`\`\`\`\`\`None\`\`\`, \`\`\`*\`\`\`\`\`\`args\`\`\`, \`\`\`use_override\`\`\`\`\`\`=\`\`\`\`\`\`True\`\`\`, \`\`\`**\`\`\`\`\`\`kwargs\`\`\`)¶
+Bases: \`\`\`AnimationGroup\`\`\`
+Methods
+
+
+
+
+
+
+
+

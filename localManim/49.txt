@@ -1,0 +1,20 @@
+
+
+numbers¶
+Animations for changing numbers.
+
+
+Classes
+
+
+
+\`\`\`ChangeDecimalToValue\`\`\`
+
+
+\`\`\`ChangingDecimal\`\`\`
+
+
+
+
+
+

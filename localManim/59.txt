@@ -1,0 +1,77 @@
+
+
+transform¶
+Animations transforming one mobject into another.
+
+
+Classes
+
+
+
+\`\`\`ApplyComplexFunction\`\`\`
+
+
+\`\`\`ApplyFunction\`\`\`
+
+
+\`\`\`ApplyMatrix\`\`\`
+Applies a matrix transform to an mobject.
+
+\`\`\`ApplyMethod\`\`\`
+Animates a mobject by applying a method.
+
+\`\`\`ApplyPointwiseFunction\`\`\`
+Animation that applies a pointwise function to a mobject.
+
+\`\`\`ApplyPointwiseFunctionToCenter\`\`\`
+
+
+\`\`\`ClockwiseTransform\`\`\`
+Transforms the points of a mobject along a clockwise oriented arc.
+
+\`\`\`CounterclockwiseTransform\`\`\`
+Transforms the points of a mobject along a counterclockwise oriented arc.
+
+\`\`\`CyclicReplace\`\`\`
+An animation moving mobjects cyclically.
+
+\`\`\`FadeToColor\`\`\`
+Animation that changes color of a mobject.
+
+\`\`\`FadeTransform\`\`\`
+Fades one mobject into another.
+
+\`\`\`FadeTransformPieces\`\`\`
+Fades submobjects of one mobject into submobjects of another one.
+
+\`\`\`MoveToTarget\`\`\`
+Transforms a mobject to the mobject stored in its \`\`\`target\`\`\` attribute.
+
+\`\`\`ReplacementTransform\`\`\`
+Replaces and morphs a mobject into a target mobject.
+
+\`\`\`Restore\`\`\`
+Transforms a mobject to its last saved state.
+
+\`\`\`ScaleInPlace\`\`\`
+Animation that scales a mobject by a certain factor.
+
+\`\`\`ShrinkToCenter\`\`\`
+Animation that makes a mobject shrink to center.
+
+\`\`\`Swap\`\`\`
+
+
+\`\`\`Transform\`\`\`
+A Transform transforms a Mobject into a target Mobject.
+
+\`\`\`TransformAnimations\`\`\`
+
+
+\`\`\`TransformFromCopy\`\`\`
+Performs a reversed Transform
+
+
+
+
+

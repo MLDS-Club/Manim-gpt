@@ -1,0 +1,64 @@
+
+
+color¶
+Utilities for working with colors and predefined color constants.
+
+Color data structure¶
+
+
+
+\`\`\`core\`\`\`
+Manim's (internal) color data structure and some utilities for color conversion.
+
+
+
+
+
+
+Predefined colors¶
+There are several predefined colors available in Manim:
+
+The colors listed in \`\`\`color.manim_colors\`\`\` are loaded into
+Manim’s global name space.
+The colors in \`\`\`color.AS2700\`\`\`, \`\`\`color.BS381\`\`\`, \`\`\`color.X11\`\`\`,
+and \`\`\`color.XKCD\`\`\` need to be accessed via their module (which are available
+in Manim’s global name space), or imported separately. For example:
+\`\`\`>>> from manim import XKCD
+>>> XKCD.AVOCADO
+ManimColor('#90B134')\`\`\`
+
+
+Or, alternatively:
+\`\`\`>>> from manim.utils.color.XKCD import AVOCADO
+>>> AVOCADO
+ManimColor('#90B134')\`\`\`
+
+
+
+
+The following modules contain the predefined color constants:
+
+
+
+\`\`\`manim_colors\`\`\`
+Colors included in the global name space.
+
+\`\`\`AS2700\`\`\`
+Australian Color Standard
+
+\`\`\`BS381\`\`\`
+British Color Standard
+
+\`\`\`XKCD\`\`\`
+Colors from the XKCD Color Name Survey
+
+\`\`\`X11\`\`\`
+X11 Colors
+
+
+
+
+
+
+
+

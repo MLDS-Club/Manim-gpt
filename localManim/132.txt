@@ -1,0 +1,28 @@
+
+
+text¶
+Mobjects used to display Text using Pango or LaTeX.
+
+Modules¶
+
+
+
+\`\`\`code_mobject\`\`\`
+Mobject representing highlighted source code listings.
+
+\`\`\`numbers\`\`\`
+Mobjects representing numbers.
+
+\`\`\`tex_mobject\`\`\`
+Mobjects representing text rendered using LaTeX.
+
+\`\`\`text_mobject\`\`\`
+Mobjects used for displaying (non-LaTeX) text.
+
+
+
+
+
+
+
+

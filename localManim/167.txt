@@ -1,0 +1,76 @@
+
+
+constants¶
+Constant definitions.
+
+
+Module Attributes
+
+
+
+
+\`\`\`ORIGIN\`\`\`
+The center of the coordinate system.
+
+\`\`\`UP\`\`\`
+One unit step in the positive Y direction.
+
+\`\`\`DOWN\`\`\`
+One unit step in the negative Y direction.
+
+\`\`\`RIGHT\`\`\`
+One unit step in the positive X direction.
+
+\`\`\`LEFT\`\`\`
+One unit step in the negative X direction.
+
+\`\`\`IN\`\`\`
+One unit step in the negative Z direction.
+
+\`\`\`OUT\`\`\`
+One unit step in the positive Z direction.
+
+\`\`\`UL\`\`\`
+One step up plus one step left.
+
+\`\`\`UR\`\`\`
+One step up plus one step right.
+
+\`\`\`DL\`\`\`
+One step down plus one step left.
+
+\`\`\`DR\`\`\`
+One step down plus one step right.
+
+\`\`\`PI\`\`\`
+The ratio of the circumference of a circle to its diameter.
+
+\`\`\`TAU\`\`\`
+The ratio of the circumference of a circle to its radius.
+
+\`\`\`DEGREES\`\`\`
+The exchange rate between radians and degrees.
+
+
+
+
+
+
+
+Classes
+
+
+
+\`\`\`CapStyleType\`\`\`
+Collection of available cap styles.
+
+\`\`\`LineJointType\`\`\`
+Collection of available line joint types.
+
+\`\`\`RendererType\`\`\`
+An enumeration of all renderer types that can be assigned to the \`\`\`config.renderer\`\`\` attribute.
+
+
+
+
+

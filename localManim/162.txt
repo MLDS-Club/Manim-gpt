@@ -1,0 +1,79 @@
+
+
+Utilities and other modules¶
+
+Module Index¶
+
+
+
+\`\`\`bezier\`\`\`
+Utility functions related to Bézier curves.
+
+\`\`\`color\`\`\`
+Utilities for working with colors and predefined color constants.
+
+\`\`\`commands\`\`\`
+
+
+\`\`\`config_ops\`\`\`
+Utilities that might be useful for configuration dictionaries.
+
+\`\`\`constants\`\`\`
+Constant definitions.
+
+\`\`\`debug\`\`\`
+Debugging utilities.
+
+\`\`\`deprecation\`\`\`
+Decorators for deprecating classes, functions and function parameters.
+
+\`\`\`docbuild\`\`\`
+Utilities for building the Manim documentation.
+
+\`\`\`hashing\`\`\`
+Utilities for scene caching.
+
+\`\`\`images\`\`\`
+Image manipulation utilities.
+
+\`\`\`ipython_magic\`\`\`
+Utilities for using Manim with IPython (in particular: Jupyter notebooks)
+
+\`\`\`iterables\`\`\`
+Operations on iterables.
+
+\`\`\`paths\`\`\`
+Functions determining transformation paths between sets of points.
+
+\`\`\`rate_functions\`\`\`
+A selection of rate functions, i.e., speed curves for animations.
+
+\`\`\`simple_functions\`\`\`
+A collection of simple functions.
+
+\`\`\`sounds\`\`\`
+Sound-related utility functions.
+
+\`\`\`space_ops\`\`\`
+Utility functions for two- and three-dimensional vectors.
+
+\`\`\`testing\`\`\`
+Utilities for Manim tests using pytest.
+
+\`\`\`tex\`\`\`
+Utilities for processing LaTeX templates.
+
+\`\`\`tex_file_writing\`\`\`
+Interface for writing, compiling, and converting \`\`\`.tex\`\`\` files.
+
+\`\`\`tex_templates\`\`\`
+A library of LaTeX templates.
+
+\`\`\`typing\`\`\`
+Custom type definitions used in Manim.
+
+
+
+
+
+

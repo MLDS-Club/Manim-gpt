@@ -1,0 +1,20 @@
+
+
+camera¶
+A camera converts the mobjects contained in a Scene into an array of pixels.
+
+
+Classes
+
+
+
+\`\`\`BackgroundColoredVMobjectDisplayer\`\`\`
+Auxiliary class that handles displaying vectorized mobjects with a set background image.
+
+\`\`\`Camera\`\`\`
+Base camera class.
+
+
+
+
+
