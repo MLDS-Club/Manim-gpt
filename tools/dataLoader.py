@@ -17,3 +17,4 @@ def getConfigKey(keyName):
     with open(config_path, 'r') as config_file:
         config = json.load(config_file)
     return config[keyName]
+
