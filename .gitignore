@@ -1,3 +1,6 @@
 .venv
 .env
 config.json
+**/__pycache__/
+*.pyc
+/tools/__pycache__
