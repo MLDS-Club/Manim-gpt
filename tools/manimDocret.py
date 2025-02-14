@@ -2,6 +2,13 @@ from langchain_core.tools import tool
 import chromadb
 import chromadb.utils.embedding_functions as embedding_functions
 import torch
+from pathlib import Path
+
+# Get the script's directory - this way the file can be ran from anywhere
+script_dir = Path(__file__).parent
+# Construct the path relative to the script and resolve it to an absolute path
+data_path = script_dir / ".." / "data" / "manim"
+manimPath = str(data_path.resolve())
 
 device = "cuda"
 if not torch.cuda.is_available():
@@ -20,7 +27,7 @@ def manimSearch(query:str) -> list:
       device = device, # xla for TPU, cuda for GPU, cpu for CPU (still have to get xla to work but cuda takes ~1 second or less, cpu takes ~30 seconds per query)
       trust_remote_code=True
   )
-  chromaClient = chromadb.PersistentClient(path="../data/manim")
+  chromaClient = chromadb.PersistentClient(path=manimPath)
   collection = chromaClient.get_collection("manim_docs2801", embedding_function=huggingface_ef)
   return collection.query(query_texts=queryPrompt, n_results=15)["documents"]
 
