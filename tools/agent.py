@@ -13,7 +13,12 @@ prompt = ChatPromptTemplate.from_messages([
    - Solves the problem mathematically
    - Creates visual animations explaining each step
    - Uses appropriate Manim components (Scenes, MObjects, Animations)
-4. Return ONLY the final code in proper Manim format"""),
+4. Return ONLY the final code in proper Manim format
+     
+When creating your code, you should create visually informative graphics. In doing so, please follow the rules below:
+1. Make sure that all elements on the screen are clearly visible to the viewer and not overlapping with other elements unless necessary for visual explanation.
+2. When moving between multiple steps of a solution, use clear transitions and animations of objects.
+3. Never include animations, objects, text, or other elements that are irrelevant to the solution of the problem."""),
     ("user", "{input}"),
     ("placeholder", "{agent_scratchpad}")
 ])
@@ -21,6 +26,6 @@ prompt = ChatPromptTemplate.from_messages([
 agent = create_tool_calling_agent(llm, tools, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-math_problem = "What is the length of the hypotenuse of a triangle with legs of length 3 and 4?"
+math_problem = "What is the area of a circle with a radius of 3 meters?"
 result = agent_executor.invoke({"input": math_problem})
 print(result["output"])
