@@ -18,6 +18,13 @@ llm = ChatGoogleGenerativeAI(
 		HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE, 
 		HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE}
 )
- 
+
+def queryGoogleLLM(query:str) -> str:
+	"""
+	Retrieve information from Google using the language model, the query should be as if it is a web search. 
+	Returns a string passage.
+	"""
+	return llm.invoke(query)
+
 if __name__ == "__main__":
-    print(llm.invoke("What company developed you"))
+    print(queryGoogleLLM("What company developed you"))
