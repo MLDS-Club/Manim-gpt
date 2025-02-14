@@ -3,6 +3,7 @@ langchain
 langchain_google_genai
 python-dotenv
 langchain_community
+langchain_core
 wikipedia 
 langchain_unstructured
 langchain_google_genai
@@ -11,6 +12,6 @@ langchain_text_splitters
 langchain_community
 bs4
 requests
-urllib
 tqdm
-os
+chromadb
+sentence_transformers
