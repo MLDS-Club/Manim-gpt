@@ -15,6 +15,16 @@ if not torch.cuda.is_available():
   input("CUDA (NVIDIA GPU) is not available to run manimSearch. Press ENTER to use CPU instead.")
   device = "cpu"
 
+
+#Run this on startup to load the model and collection so it doesn't have to be done every time -- this is all essentially part of the function below
+huggingface_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="NovaSearch/stella_en_1.5B_v5",
+    device = device, # xla for TPU, cuda for GPU, cpu for CPU (still have to get xla to work but cuda takes ~1 second or less, cpu takes ~30 seconds per query)
+    trust_remote_code=True
+)
+chromaClient = chromadb.PersistentClient(path=manimPath)
+collection = chromaClient.get_collection("manim_docs2801", embedding_function=huggingface_ef)
+
 @tool 
 def manimSearch(query:str) -> list:
   """
@@ -22,14 +32,8 @@ def manimSearch(query:str) -> list:
   Returns a list of 15 relevant string passages.
   """
   queryPrompt = f"Given a web search query, retrieve relevant passages that answer the query '{query}'"
-  huggingface_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-      model_name="NovaSearch/stella_en_1.5B_v5",
-      device = device, # xla for TPU, cuda for GPU, cpu for CPU (still have to get xla to work but cuda takes ~1 second or less, cpu takes ~30 seconds per query)
-      trust_remote_code=True
-  )
-  chromaClient = chromadb.PersistentClient(path=manimPath)
-  collection = chromaClient.get_collection("manim_docs2801", embedding_function=huggingface_ef)
-  return collection.query(query_texts=queryPrompt, n_results=15)["documents"]
+  return collection.query(query_texts=queryPrompt, n_results=15)["documents"][0] #index 0 gets the list
 
 if __name__ == "__main__":
   print(manimSearch.invoke("How to create a circle in manim?")[0])
+  #print(manimSearch.invoke("How to create a circle in manim?"))
