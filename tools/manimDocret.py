@@ -20,7 +20,7 @@ def manimSearch(query:str) -> list:
       device = device, # xla for TPU, cuda for GPU, cpu for CPU (still have to get xla to work but cuda takes ~1 second or less, cpu takes ~30 seconds per query)
       trust_remote_code=True
   )
-  chromaClient = chromadb.PersistentClient(path="./data/manim")
+  chromaClient = chromadb.PersistentClient(path="../data/manim")
   collection = chromaClient.get_collection("manim_docs2801", embedding_function=huggingface_ef)
   return collection.query(query_texts=queryPrompt, n_results=15)["documents"]
 
