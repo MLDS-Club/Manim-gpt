@@ -1,4 +1,5 @@
 from langchain_core.tools import tool
+import chromadb
 import chromadb.utils.embedding_functions as embedding_functions
 import torch
 
