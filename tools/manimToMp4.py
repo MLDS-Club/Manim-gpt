@@ -27,7 +27,7 @@ def render_manim(filename: str, output_path: str) -> None:
         obj = getattr(module, attr)
         if (isinstance(obj, type) and
             issubclass(obj, Scene) and
-            obj.__name__ != 'Scene'):
+            'Scene' not in obj.__name__):
             scenes.append(obj.__name__)
     
     if not scenes:
@@ -70,5 +70,3 @@ def render_manim(filename: str, output_path: str) -> None:
     shutil.move(str(generated_video), str(dest_path))
 
     shutil.rmtree(Path('./media/videos/') / module_name)
-
-render_manim('./output/videoScript/manimOutput.py', './output/compiledVideo/1+4output.mp4')
