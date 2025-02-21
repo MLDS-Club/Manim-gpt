@@ -1,41 +1,49 @@
-```python
 from manim import *
 
-class CircleArea(Scene):
+class Addition(Scene):
     def construct(self):
-        # Define the radius
-        radius = 3
+        # Create the text objects
+        text1 = Tex("1")
+        text2 = Tex("+")
+        text3 = Tex("4")
+        text4 = Tex("=")
+        text5 = Tex("5")
 
-        # Create the circle
-        circle = Circle(radius=radius)
-        circle.set_fill(BLUE, opacity=0.5)
-        self.play(Create(circle))
+        # Position the text objects
+        text1.move_to(LEFT * 2)
+        text2.next_to(text1, RIGHT)
+        text3.next_to(text2, RIGHT)
+        text4.next_to(text3, RIGHT)
+        text5.next_to(text4, RIGHT)
 
-        # Show the radius
-        radius_line = Line(circle.get_center(), circle.get_right())
-        radius_label = MathTex("r = 3").next_to(radius_line, RIGHT)
-        self.play(Create(radius_line), Write(radius_label))
+        # Add the text objects to the scene
+        self.play(Write(text1))
+        self.wait(0.5)
+        self.play(Write(text2))
+        self.wait(0.5)
+        self.play(Write(text3))
+        self.wait(0.5)
+        self.play(Write(text4))
+        self.wait(0.5)
+        self.play(Write(text5))
         self.wait(1)
 
-        # Calculate the area
-        area = PI * radius**2
+        # Group text1, text2, and text3
+        group = VGroup(text1, text2, text3)
 
-        # Display the formula
-        formula = MathTex("Area = \\pi r^2").to_edge(UP)
-        self.play(Write(formula))
+        # Create five dots
+        dots = VGroup(*[Dot() for _ in range(5)])
+        dots.arrange(RIGHT)
+        dots.next_to(group, DOWN)
+
+        # Show 1 dot
+        self.play(Create(dots[0]))
+        self.wait(0.5)
+
+        # Show 4 dots
+        self.play(Create(dots[1:5]))
         self.wait(1)
 
-        # Substitute the value of r
-        substitution = MathTex("Area = \\pi (3)^2").next_to(formula, DOWN)
-        self.play(Write(substitution))
-        self.wait(1)
-
-        # Show the result
-        result = MathTex(f"Area = {area:.2f}").next_to(substitution, DOWN)
-        self.play(Write(result))
+        # Highlight all 5 dots and the answer
+        self.play(Indicate(dots), Indicate(text5))
         self.wait(2)
-
-        # Fill the circle to represent the area
-        self.play(circle.animate.set_fill(BLUE, opacity=0.8))
-        self.wait(2)
-```

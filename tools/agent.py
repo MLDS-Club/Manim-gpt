@@ -26,7 +26,7 @@ When creating your code, you should create visually informative graphics. In doi
 agent = create_tool_calling_agent(llm, tools, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-math_problem = "What is the area of a circle with a radius of 3 meters?"
+math_problem = "What is 1 + 4?"
 result = agent_executor.invoke({"input": math_problem})
 f = open("./output/videoScript/manimOutput.py", "w")
 f.write(result["output"])
