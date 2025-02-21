@@ -37,7 +37,7 @@ def getConfigKey(keyName):
 
     for existing_key in config_data:
         if existing_key not in template_data:
-            print(f"WARNING: '{existing_key}' only exists in config.json, not configTemplate.json! Please fix Abhiram!")
+            print(f"==========\nWARNING: '{existing_key}' only exists in config.json, not configTemplate.json! \nEither update configTemplate.json or remove '{existing_key}' from config.json\n==========")
 
     if keyName not in config_data:
         raise KeyError(f"Key '{keyName}' not found in configuration file.")
