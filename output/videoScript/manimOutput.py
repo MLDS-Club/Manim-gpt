@@ -1,4 +1,4 @@
-```python
+python
 from manim import *
 
 class CircleArea(Scene):
@@ -38,4 +38,3 @@ class CircleArea(Scene):
         # Fill the circle to represent the area
         self.play(circle.animate.set_fill(BLUE, opacity=0.8))
         self.wait(2)
-```

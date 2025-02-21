@@ -1,9 +1,9 @@
 from langchain.agents import AgentExecutor, create_tool_calling_agent
-from googleAI import llm
-from manimDocret import manimSearch
+from .googleAI import llm
+from .manimDocret import manimSearch
+from .manimCodeTester import executeManim
 from langchain_core.prompts import ChatPromptTemplate
-
-tools = [manimSearch]
+tools = [manimSearch, executeManim]
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", """You are a mathematical visualization assistant. Follow these steps:
@@ -13,7 +13,8 @@ prompt = ChatPromptTemplate.from_messages([
    - Solves the problem mathematically
    - Creates visual animations explaining each step
    - Uses appropriate Manim components (Scenes, MObjects, Animations)
-4. Return ONLY the final code in proper Manim format
+4. Use executeManim to test the code and ensure it works correctly, ALWAYS use this tool.
+5. Return ONLY the final code in proper Manim format
      
 When creating your code, you should create visually informative graphics. In doing so, please follow the rules below:
 1. Make sure that all elements on the screen are clearly visible to the viewer and not overlapping with other elements unless necessary for visual explanation.
@@ -24,9 +25,13 @@ When creating your code, you should create visually informative graphics. In doi
 ])
 
 agent = create_tool_calling_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+agentExecutor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-math_problem = "What is the area of a circle with a radius of 3 meters?"
-result = agent_executor.invoke({"input": math_problem})
-f = open("./output/videoScript/manimOutput.py", "w")
-f.write(result["output"])
+def createScript(request):
+    return agentExecutor.invoke({"input": request})["output"]
+
+if __name__ == "__main__":
+    math_problem = "What is the area of a circle with a radius of 3 meters?"
+    result = agentExecutor.invoke({"input": math_problem})
+    print(result)
+    

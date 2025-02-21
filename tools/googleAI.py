@@ -7,7 +7,7 @@ import os
 import bs4
 from langchain_community.document_loaders import AsyncChromiumLoader
 from langchain_community.document_transformers import BeautifulSoupTransformer
-from dataLoader import getConfigKey
+from .dataLoader import getConfigKey
 
 llm = ChatGoogleGenerativeAI(
 	model="models/gemini-2.0-pro-exp-02-05",
