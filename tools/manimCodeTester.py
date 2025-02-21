@@ -3,10 +3,12 @@ import tempfile
 import traceback
 import os
 import sys
+from langchain_core.tools import tool
 
-def executeManim(code, timeout=10):
+@tool
+def executeManim(code: str, timeout: int = 10) -> dict:
     """
-    Executes a Manim script safely and captures errors. Should be used to check if a Manim script is valid after creating it.
+    Only accepts isolated manim code. Executes a Manim script safely and captures errors. Should be used to check if a Manim script is valid after creating it.
     
     Args:
         code (str): The Python code containing the Manim script.
