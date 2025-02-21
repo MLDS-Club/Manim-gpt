@@ -28,4 +28,5 @@ agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 math_problem = "What is the area of a circle with a radius of 3 meters?"
 result = agent_executor.invoke({"input": math_problem})
-print(result["output"])
+f = open("./output/videoScript/manimOutput.py", "w")
+f.write(result["output"])
