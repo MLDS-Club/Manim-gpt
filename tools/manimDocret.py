@@ -12,7 +12,7 @@ manimPath = str(data_path.resolve())
 
 device = "cuda"
 if not torch.cuda.is_available():
-  input("CUDA (NVIDIA GPU) is not available to run manimSearch. Press ENTER to use CPU instead.")
+  print("Warning: CUDA (NVIDIA GPU) is not available to run manimSearch. Using CPU instead.")
   device = "cpu"
 
 

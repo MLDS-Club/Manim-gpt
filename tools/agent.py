@@ -28,6 +28,7 @@ agent = create_tool_calling_agent(llm, tools, prompt)
 agentExecutor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 def createScript(request):
+    print(f"Executing agent with request: {request}")
     return agentExecutor.invoke({"input": request})["output"]
 
 if __name__ == "__main__":

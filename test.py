@@ -1,9 +1,9 @@
 from tools import agent
 from tools import dataSaver
-from tools import manimToMp4
+from tools import scriptToVideo
 
-question = "What is the square root of 64?"
+question = "What is a 1-sample z interval for proportions?"
 result = agent.createScript(question)
-dataSaver.saveVideoScript(result, "testScript.py")
-manimToMp4.render_manim('./output/videoScript/testScript.py', './output/compiledVideo/sqrt64.mp4')
-print(result)
+dataSaver.saveVideoScript(result, "navTest2.py")
+scriptToVideo.convert_to_mp4('navTest2.py', 'navTestVideo2.mp4')
+# print(result)
