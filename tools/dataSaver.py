@@ -1,6 +1,9 @@
 import os
 
 def saveVideoScript(content = "No content provided.", filename = "default.py"):
+
+    print(f"Saving video script to {filename}...")
+    
     # Strip any "`", "python", or whitespace characters from the beginning and end of the string
     content = content.strip().strip('`').strip('python').strip()
     
