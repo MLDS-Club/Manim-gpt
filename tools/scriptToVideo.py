@@ -5,6 +5,7 @@ import glob
 import shutil
 
 def convert_to_mp4(input_file: str, output_file: str):
+    print(f"Converting {input_file} to {output_file}...")
     """
     Given an input_file (e.g. 'inputFile.py') located in ../output/videoScript,
     render it with Manim and move the resulting .mp4 into ../output/compiledVideo

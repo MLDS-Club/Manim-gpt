@@ -33,6 +33,8 @@ def createScript(request):
     print(f"Executing agent with request: {request}")
     return agentExecutor.invoke({"input": request})["output"]
 
+print("Agent and executor created successfully. Ready to process requests.")
+
 if __name__ == "__main__":
     math_problem = "How do I solve for the determinant of a 3x3 matrix?"
     result = agentExecutor.invoke({"input": math_problem})
