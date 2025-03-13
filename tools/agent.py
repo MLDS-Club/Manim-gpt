@@ -19,7 +19,9 @@ prompt = ChatPromptTemplate.from_messages([
 When creating your code, you should create visually informative graphics. In doing so, please follow the rules below:
 1. Make sure that all elements on the screen are clearly visible to the viewer and not overlapping with other elements unless necessary for visual explanation.
 2. When moving between multiple steps of a solution, use clear transitions and animations of objects.
-3. Never include animations, objects, text, or other elements that are irrelevant to the solution of the problem."""),
+3. Never include animations, objects, text, or other elements that are irrelevant to the solution of the problem.
+
+While coming up with your solution, you should always call the agent tool "manimSearch" to search for relevant Manim documentation."""),
     ("user", "{input}"),
     ("placeholder", "{agent_scratchpad}")
 ])
@@ -32,7 +34,7 @@ def createScript(request):
     return agentExecutor.invoke({"input": request})["output"]
 
 if __name__ == "__main__":
-    math_problem = "What is the area of a circle with a radius of 3 meters?"
+    math_problem = "How do I solve for the determinant of a 3x3 matrix?"
     result = agentExecutor.invoke({"input": math_problem})
     print(result)
     
