@@ -4,6 +4,8 @@ import chromadb.utils.embedding_functions as embedding_functions
 import torch
 from pathlib import Path
 
+print("== Init manimDocret.py ... ==")
+
 # Get the script's directory - this way the file can be ran from anywhere
 script_dir = Path(__file__).parent
 # Construct the path relative to the script and resolve it to an absolute path
@@ -33,6 +35,8 @@ def manimSearch(query:str) -> list:
   """
   queryPrompt = f"Given a web search query, retrieve relevant passages that answer the query '{query}'"
   return collection.query(query_texts=queryPrompt, n_results=15)["documents"][0] #index 0 gets the list
+
+print("== manimDocret.py imported, manimSearch is available ==")
 
 if __name__ == "__main__":
   print(manimSearch.invoke("How to create a circle in manim?")[0])

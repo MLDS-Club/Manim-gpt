@@ -5,6 +5,8 @@ from .manimCodeTester import executeManim
 from langchain_core.prompts import ChatPromptTemplate
 tools = [manimSearch, executeManim]
 
+print("== Initializing agent with tools ... ==")
+
 prompt = ChatPromptTemplate.from_messages([
     ("system", """You are a mathematical visualization assistant. Follow these steps:
 1. Analyze the user's math problem
@@ -33,7 +35,7 @@ def createScript(request):
     print(f"Executing agent with request: {request}")
     return agentExecutor.invoke({"input": request})["output"]
 
-print("Agent and executor created successfully. Ready to process requests.")
+print("== Agent created successfully. Ready to process requests. ==")
 
 if __name__ == "__main__":
     math_problem = "How do I solve for the determinant of a 3x3 matrix?"
