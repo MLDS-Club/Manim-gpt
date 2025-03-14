@@ -34,7 +34,7 @@ def manimSearch(query:str) -> list:
   Returns a list of 15 relevant string passages.
   """
   queryPrompt = f"Given a web search query, retrieve relevant passages that answer the query '{query}'"
-  return collection.query(query_texts=queryPrompt, n_results=15)["documents"][0] #index 0 gets the list
+  return collection.query(query_texts=queryPrompt, n_results=6)["documents"][0] #index 0 gets the list
 
 print("== manimDocret.py imported, manimSearch is available ==")
 
