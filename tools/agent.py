@@ -18,6 +18,7 @@ prompt = ChatPromptTemplate.from_messages([
    - Creates visual animations explaining each step
    - Uses appropriate Manim components (Scenes, MObjects, Animations)
 4. Use executeManim to test the code and ensure it works correctly, ALWAYS use this tool.
+6. MAKE SURE EVERYTHING WORKS, no errors should occur when rendering the code into an mp4
 5. Return ONLY the final code in proper Manim format
 
 When creating your code, you should create visually informative graphics. In doing so, please follow the rules below:
