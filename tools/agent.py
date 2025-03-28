@@ -8,36 +8,47 @@ tools = [manimSearch, executeManim]
 
 print("== Initializing agent with tools ... ==")
 
-# UPDATED PROMPT: We renamed ("placeholder", ...) to ("assistant", ...)
+# Refined system prompt emphasizing Manim 0.19.0 compatibility and final code correctness
 prompt = ChatPromptTemplate.from_messages([
-    ("system", """You are a mathematical visualization assistant. Follow these steps:
-1. Analyze the user's math problem
-2. Use manimSearch to find relevant Manim documentation/techniques
+    (
+        "system",
+        """You are a mathematical visualization assistant. Follow these steps carefully:
+
+1. Analyze the user's math problem or question.
+2. Use the "manimSearch" tool to look up relevant documentation or techniques from Manim. 
 3. Generate Python code using Manim that:
-   - Solves the problem mathematically
-   - Creates visual animations explaining each step
-   - Uses appropriate Manim components (Scenes, MObjects, Animations)
-4. Use executeManim to test the code and ensure it works correctly, ALWAYS use this tool.
-6. MAKE SURE EVERYTHING WORKS, no errors should occur when rendering the code into an mp4
-5. Return ONLY the final code in proper Manim format
+   - Solves/explains the problem mathematically.
+   - Creates clear, instructive visual animations for each step.
+   - Uses only methods and syntax compatible with Manim Community version 0.19.0. 
+     For example:
+       - Use Sector(radius=...) instead of outer_radius.
+       - Do not pass 'direction' or 'buff' directly into VGroup(...).
+       - Only use features guaranteed to exist in 0.19.0.
+4. Always use the "executeManim" tool to test the code. If any syntax errors appear, fix them
+   by generating new code and retesting. Repeat until it is correct for Manim 0.19.0.
+5. No disclaimers, no extraneous commentary. Return ONLY the final working code in a single
+   Python code block once all fixes are complete.
+6. The final code must render without errors and produce a valid mp4 when run with Manim 0.19.0.
+7. Keep all text and animations relevant to solving or explaining the user's request.
+8. Do not show your reasoning or scratchpad. Return the final answer in code form only.
 
-When creating your code, you should create visually informative graphics. In doing so, please follow the rules below:
-1. Make sure that all elements on the screen are clearly visible to the viewer and not overlapping with other elements unless necessary for visual explanation.
-2. When moving between multiple steps of a solution, use clear transitions and animations of objects.
-3. Never include animations, objects, text, or other elements that are irrelevant to the solution of the problem.
-
-While coming up with your solution, you should always call the agent tool "manimSearch" to search for relevant Manim documentation.
-"""),
+Remember: 
+ - 'manimSearch' can be used to find official documentation for older versions of Manim if needed.
+ - 'executeManim' must be used to verify correctness before finalizing the code.
+"""
+    ),
     ("user", "{input}"),
-    # The "agent_scratchpad" must remain in the prompt, but we rename the role to "assistant"
+    # The "assistant" role for the chain-of-thought / scratchpad
     ("assistant", "{agent_scratchpad}")
 ])
 
+# Create the agent with the revised prompt
 agent = create_tool_calling_agent(llm, tools, prompt)
 agentExecutor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 def createScript(request):
     print(f"Executing agent with request: {request}")
+    # The agent will produce the final manim code, having tested it with executeManim
     return agentExecutor.invoke({"input": request})["output"]
 
 print("== Agent created successfully. Ready to process requests. ==")
