@@ -4,4 +4,9 @@ config.json
 **/__pycache__/
 *.pyc
 /tools/__pycache__
-
+**.mp4
+media/Tex/dda452bdf6dc1d17.svg
+media/Tex/dda452bdf6dc1d17.tex
+media/texts/6e6fef7fc4276ba7.svg
+.gitignore
+media/videos/1080p60/partial_movie_files/CheckHealthDemo/partial_movie_file_list.txt
