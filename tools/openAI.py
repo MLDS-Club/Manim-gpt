@@ -15,7 +15,7 @@ AVAILABLE_MODELS = [
     "gpt-4o",
     "text-davinci-003"
 ]
-MODEL_INDEX = 3  # 0 → gpt-3.5-turbo, 1 → gpt-4, etc.
+MODEL_INDEX = 2  # 0 → gpt-3.5-turbo, 1 → gpt-4, etc.
 # ────────────────────────────────────────────────────────────────────────────────
 
 # Safely grab the model name

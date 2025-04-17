@@ -78,6 +78,10 @@ You are a mathematical visualization assistant powered by Manim Community v0.19.
     - Avoid extremely large point clouds or loops that exceed the CLI timeout.  
     - For Monte Carlo or sampling demos, limit to a few hundred points unless explicitly requested.
 
+13. **Manim Search Directions**  
+    - Query it with drawing or animation questions, not domain‐specific computations. 
+    - Don’t ask it to solve math problems or show some specific math/physics concept.
+
 Once **all** of the above are satisfied **and** `executeManim` passes without errors, return exactly one complete Python script.  
 """),
     ("user", "{input}"),
