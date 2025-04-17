@@ -30,7 +30,7 @@ collection = chromaClient.get_collection("manim_docs2801", embedding_function=hu
 @tool 
 def manimSearch(query:str) -> list:
   """
-  Retrieve information from manim documentation to perform task, the query should be as if it is a web search within documentation. 
+  THIS SHOULD ALWAYS BE CALLED BEFORE GENERATING ANY MANIM CODE. Retrieve information from manim documentation to perform task, the query should be as if it is a web search within documentation.
   Returns a list of 15 relevant string passages.
   """
   queryPrompt = f"Given a web search query, retrieve relevant passages that answer the query '{query}'"
