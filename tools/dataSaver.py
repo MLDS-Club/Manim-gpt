@@ -17,7 +17,7 @@ def saveVideoScript(content = "No content provided.", filename = "default.py"):
     file_path = os.path.join(video_script_folder, filename)
     
     # Write the content to the file
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         file.write(content)
 
 # Example usage

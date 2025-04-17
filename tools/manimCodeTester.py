@@ -19,7 +19,7 @@ def executeManim(code: str, timeout: int = 10) -> dict:
     """
     try:
         # Create a temporary file for the Manim script
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".py", mode="w") as temp_file:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".py", mode="w", encoding="utf-8") as temp_file:
             temp_file.write(code)
             temp_file.close()
             temp_filename = temp_file.name
@@ -29,6 +29,7 @@ def executeManim(code: str, timeout: int = 10) -> dict:
             [sys.executable, temp_filename],  # Uses the same Python interpreter
             capture_output=True,
             text=True,
+            encoding="utf-8",
             timeout=timeout  # Prevents infinite loops
         )
 
