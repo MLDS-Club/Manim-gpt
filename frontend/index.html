@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase Change Video Generator</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 2rem;
+          background-color: #f0f0f0;
+        }
+        h1 {
+          margin-bottom: 1rem;
+        }
+        #form-container {
+          background: #fff;
+          padding: 1.5rem;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          width: 100%;
+          max-width: 600px;
+        }
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: bold;
+        }
+        textarea {
+          width: 100%;
+          height: 100px;
+          padding: 0.5rem;
+          margin-bottom: 1rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          resize: vertical;
+        }
+        button {
+          background: #007bff;
+          color: white;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 1rem;
+        }
+        button:disabled {
+          background: #999;
+          cursor: not-allowed;
+        }
+        #video-container {
+          margin-top: 2rem;
+          display: none;
+        }
+        video {
+          max-width: 100%;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #status {
+          margin-top: 1rem;
+          font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<h1>Phase Change Video Generator</h1>
+<div id="form-container">
+    <label for="question">Enter your question:</label>
+    <textarea id="question" placeholder="e.g. Visualize a phase change of a light wave going from n=1 to n=1.2..."></textarea>
+    <button id="generate-btn">Generate Video</button>
+    <div id="status"></div>
+</div>
+<div id="video-container">
+    <h2>Generated Video:</h2>
+    <video id="result-video" controls></video>
+</div>
+
+<script>
+    const btn = document.getElementById('generate-btn');
+    const questionInput = document.getElementById('question');
+    const statusDiv = document.getElementById('status');
+    const videoContainer = document.getElementById('video-container');
+    const videoEl = document.getElementById('result-video');
+
+    btn.addEventListener('click', async () => {
+      const question = questionInput.value.trim();
+      if (!question) {
+        statusDiv.textContent = 'Please enter a question.';
+        return;
+      }
+      btn.disabled = true;
+      statusDiv.textContent = 'Generating script and video... please wait.';
+      videoContainer.style.display = 'none';
+      videoEl.src = '';
+      try {
+        const response = await fetch('/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+        if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        videoEl.src = url;
+        videoContainer.style.display = 'block';
+        statusDiv.textContent = 'Video generated successfully!';
+      } catch (err) {
+        console.error(err);
+        statusDiv.textContent = 'Error: ' + err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    });
+</script>
+</body>
+</html>
