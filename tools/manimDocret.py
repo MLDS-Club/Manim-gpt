@@ -28,10 +28,21 @@ chromaClient = chromadb.PersistentClient(path=manimPath)
 collection = chromaClient.get_collection("manim_docs2801", embedding_function=huggingface_ef)
 
 @tool 
-def manimSearch(query:str) -> list:
+def manimSearch(query: str) -> list:
   """
-  Retrieve information from manim documentation to perform task, the query should be as if it is a web search within documentation. 
-  Returns a list of 15 relevant string passages.
+  Retrieves general Manim usage passages. Query it with drawing or animation questions,
+  not domain‐specific computations.
+
+  Examples of valid queries:
+    - "How do I draw a circle in Manim?"
+    - "What are the parameters of `Line`?"
+    - "How to animate text fade‑in?"
+
+  Invalid queries include:
+    - "Compute lift force on an airplane wing"
+    - "wind flow around an airplane wing"
+
+  Returns a list of relevant documentation snippets.
   """
   queryPrompt = f"Given a web search query, retrieve relevant passages that answer the query '{query}'"
   return collection.query(query_texts=queryPrompt, n_results=6)["documents"][0] #index 0 gets the list

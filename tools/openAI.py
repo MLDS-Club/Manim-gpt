@@ -10,7 +10,8 @@ AVAILABLE_MODELS = [
     "gpt-3.5-turbo",
     "gpt-4",
     "o4-mini-2025-04-16",
-    "gpt-4-32k",
+    "gpt-4.1-2025-04-14",
+    #"gpt-4o-2024-08-06",
     "gpt-4o",
     "text-davinci-003"
 ]

@@ -7,7 +7,7 @@ import re
 from langchain_core.tools import tool
 
 @tool
-def executeManim(code: str, timeout: int = 10) -> dict:
+def executeManim(code: str, timeout: int = 40) -> dict:
     """
     Executes a Manim scene for syntax and runtime validation by invoking the Manim CLI.
     Falls back to a Python import check if no Scene subclass is detected.
