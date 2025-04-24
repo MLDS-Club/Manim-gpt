@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI
 import os
-import bs4
+from bs4 import BeautifulSoup
 from langchain_community.document_loaders import AsyncChromiumLoader
 from langchain_community.document_transformers import BeautifulSoupTransformer
 from tools.dataLoader import getConfigKey
