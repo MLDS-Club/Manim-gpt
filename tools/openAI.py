@@ -8,7 +8,7 @@ from tools.dataLoader import getConfigKey
 # ── CHANGE THIS to pick your model ──────────────────────────────────────────────
 AVAILABLE_MODELS = [
     "gpt-3.5-turbo",
-    "gpt-4",
+    "o3",
     "o4-mini-2025-04-16",
     "gpt-4.1-2025-04-14",
     #"gpt-4o-2024-08-06",
