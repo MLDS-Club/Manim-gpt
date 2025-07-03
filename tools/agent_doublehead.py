@@ -20,9 +20,12 @@ class ToolTracker(BaseCallbackHandler):
     def __init__(self) -> None:
         self.used_tools: list[str] = []
 
-    def on_tool_start(self, tool, inputs, **kwargs):  # noqa: D401
-        # langchain passes the tool object – we want its name
-        self.used_tools.append(tool.name)
+    def on_tool_start(self, *args, **kwargs):
+        # args[0] might be the tool name or dict, inspect to confirm
+        serialized = args[0]
+        name = serialized.get("name", "<unknown>")
+        self.used_tools.append(name)
+
 
 # ---------------------------------------------------------------------------
 # Stage 1 – storyboard creator
