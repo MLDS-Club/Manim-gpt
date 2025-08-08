@@ -1,0 +1,1005 @@
+
+===== FILE: __init__.py (42 bytes) =====
+print(f"== tools package initialized. ==")
+===== FILE: agent.py (1136 bytes) =====
+# agent.py
+
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+# Import from the updated openAI.py file that uses ChatOpenAIForFunctions
+from .openAI import llm
+#from .googleAI import llm
+
+from .manimDocret import manimSearch
+from .manimCodeTester import executeManim
+from langchain_core.prompts import ChatPromptTemplate
+from tools import prompts
+
+
+tools = [manimSearch, executeManim]
+
+print("== Initializing agent with tools ... ==")
+
+# System prompt emphasizing Manim 0.19.0 compatibility
+prompt = prompts.optimized2
+
+# Create the agent with the revised prompt
+agent = create_tool_calling_agent(llm, tools, prompt)
+agentExecutor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+def createScript(request):
+    print(f"Executing agent with request: {request}")
+    return agentExecutor.invoke({"input": request})["output"]
+
+print("== Agent created successfully. Ready to process requests. ==")
+
+if __name__ == "__main__":
+    test_question = "How do I solve for the determinant of a 3x3 matrix?"
+    result = agentExecutor.invoke({"input": test_question})
+    print(result)
+
+===== FILE: agent_doublehead.py (4544 bytes) =====
+# agent.py  ── two-phase Manim agent (creator + executor)
+
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain.callbacks.base import BaseCallbackHandler
+from langchain_core.prompts import ChatPromptTemplate
+
+# Updated OpenAI wrapper that supports tool calls
+from .openAI import llm   # noqa: E402
+
+# Tools
+from .manimDocret import manimSearch          # noqa: E402
+from .manimCodeTester import executeManim     # noqa: E402
+from tools import prompts                     # noqa: E402
+
+# ---------------------------------------------------------------------------
+# Helper: capture every tool the agent invokes
+# ---------------------------------------------------------------------------
+class ToolTracker(BaseCallbackHandler):
+    """Collects the names of all tools used during an Agent run."""
+    def __init__(self) -> None:
+        self.used_tools: list[str] = []
+
+    def on_tool_start(self, *args, **kwargs):
+        # args[0] might be the tool name or dict, inspect to confirm
+        serialized = args[0]
+        name = serialized.get("name", "<unknown>")
+        self.used_tools.append(name)
+
+
+# ---------------------------------------------------------------------------
+# Stage 1 – storyboard creator
+# ---------------------------------------------------------------------------
+creator_tools = [manimSearch]  # ONLY storyboard-safe tools
+creator_prompt: ChatPromptTemplate = prompts.a2_create_tasks
+
+creator_agent = create_tool_calling_agent(llm, creator_tools, creator_prompt)
+creator_executor = AgentExecutor(
+    agent=creator_agent,
+    tools=creator_tools,
+    verbose=False   # keep console clean – we’ll print what we need
+)
+
+# ---------------------------------------------------------------------------
+# Stage 2 – code executor
+# ---------------------------------------------------------------------------
+executor_tools = [executeManim, manimSearch]  # may re-query docs, then render
+executor_prompt: ChatPromptTemplate = prompts.a2_execute_tasks
+
+executor_agent = create_tool_calling_agent(llm, executor_tools, executor_prompt)
+executor_executor = AgentExecutor(
+    agent=executor_agent,
+    tools=executor_tools,
+    verbose=False
+)
+
+# ---------------------------------------------------------------------------
+# Public façade (same name as before)
+# ---------------------------------------------------------------------------
+def createScript(request: str) -> str:
+    """Generate storyboard + Manim code, printing diagnostics as required."""
+    # ---- Stage 1 ----------------------------------------------------------
+    creator_tracker = ToolTracker()
+    storyboard = creator_executor.invoke(
+        {"storyboard": "", "input": request},  # extra key for prompt var
+        config={"callbacks": [creator_tracker]}
+    )["output"]
+
+    print("\n===== STORYBOARD (Stage 1 output) =====")
+    print(storyboard)                 # Print the storyboard itself
+    print("===== TOOLS USED IN STAGE 1 =====")
+    for tname in creator_tracker.used_tools:
+        print(f"- {tname}")
+    print("=======================================\n")
+
+    # ---- Stage 2 ----------------------------------------------------------
+    executor_tracker = ToolTracker()
+    script_output = executor_executor.invoke(
+        {"storyboard": storyboard},
+        config={"callbacks": [executor_tracker]}
+    )["output"]
+
+    # count lines in returned Python code
+    n_lines = script_output.count("\n") + 1
+    print(f"===== Stage 2 script length: {n_lines} lines =====\n")
+    for tname in executor_tracker.used_tools:
+        print(f"- {tname}")
+    print("=======================================\n")
+
+    # (Optional) list tools Stage 2 used — not part of the spec but handy
+    # for debugging; comment out if undesired.
+    # print("===== TOOLS USED IN STAGE 2 =====")
+    # for tname in executor_tracker.used_tools:
+    #     print(f"- {tname}")
+    # print("===================================\n")
+
+    return script_output  # returned identically to the old agent
+
+
+# ---------------------------------------------------------------------------
+# CLI test harness
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    test_question = "How do I solve for the determinant of a 3×3 matrix?"
+    result_script = createScript(test_question)
+    print("===== FINAL MANIM SCRIPT (returned value) =====")
+    print(result_script)
+
+===== FILE: dataLoader.py (2111 bytes) =====
+import json
+import os
+
+def getConfigKey(keyName):
+    """
+    Retrieves the API key from a configuration file. 
+    
+    Also checks to ensure that all required keys specified in configTemplate.json are present.
+    Args:
+        name (str): The name of the key to retrieve (not used in the current implementation).
+    Returns:
+        str: The API key retrieved from the configuration file.
+    Raises:
+        FileNotFoundError: If the configuration file does not exist.
+        KeyError: If the 'api_key' is not found in the configuration file.
+        json.JSONDecodeError: If the configuration file contains invalid JSON.
+    """
+    
+    config_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
+    template_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'configTemplate.json')
+
+    if not os.path.exists(config_file_path):
+        raise FileNotFoundError(f"Configuration file not found: {config_file_path}") # ensure that the configuration file exists
+
+    if not os.path.exists(template_file_path):
+        raise FileNotFoundError(f"Configuration file not found: {template_file_path}") # ensure that the template file exists
+
+    with open(config_file_path, 'r') as config_file:
+        config_data = json.load(config_file)
+
+    with open(template_file_path, 'r') as template_file:
+        template_data = json.load(template_file)
+
+    for required_key in template_data:
+        if required_key not in config_data:
+            raise KeyError(f"Required key '{required_key}' not found in configuration file (config.py). If this is an error, change configTemplate.json")
+
+    for existing_key in config_data:
+        if existing_key not in template_data:
+            print(f"==========\nWARNING: '{existing_key}' only exists in config.json, not configTemplate.json! \nEither update configTemplate.json or remove '{existing_key}' from config.json\n==========")
+
+    if keyName not in config_data:
+        raise KeyError(f"Key '{keyName}' not found in configuration file.")
+
+    return config_data[keyName]
+===== FILE: dataSaver.py (909 bytes) =====
+import os
+
+def saveVideoScript(content = "No content provided.", filename = "default.py"):
+
+    print(f"Saving video script to {filename}...")
+    
+    # Strip any "`", "python", or whitespace characters from the beginning and end of the string
+    content = content.strip().strip('`').strip('python').strip()
+    
+    # Define the path to the videoScript folder
+    video_script_folder = os.path.join(os.path.dirname(__file__), '..', 'output', 'videoScript')
+    
+    # Ensure the directory exists
+    os.makedirs(video_script_folder, exist_ok=True)
+    
+    # Define the full path to the file
+    file_path = os.path.join(video_script_folder, filename)
+    
+    # Write the content to the file
+    with open(file_path, 'w', encoding='utf-8') as file:
+        file.write(content)
+
+# Example usage
+if __name__ == "__main__":
+    saveVideoScript('example.txt', 'This is a test string.')
+===== FILE: googleAgent.py (2781 bytes) =====
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+from .googleAI import llm
+from .manimDocret import manimSearch
+from .manimCodeTester import executeManim
+from langchain_core.prompts import ChatPromptTemplate
+
+tools = [manimSearch, executeManim]
+
+print("== Initializing agent with tools ... ==")
+
+# Refined system prompt emphasizing Manim 0.19.0 compatibility and final code correctness
+prompt = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """You are a mathematical visualization assistant. Follow these steps carefully:
+
+1. Analyze the user's math problem or question.
+2. Use the "manimSearch" tool to look up relevant documentation or techniques from Manim. 
+3. Generate Python code using Manim that:
+   - Solves/explains the problem mathematically.
+   - Creates clear, instructive visual animations for each step.
+   - Uses only methods and syntax compatible with Manim Community version 0.19.0. 
+     For example:
+       - Use Sector(radius=...) instead of outer_radius.
+       - Do not pass 'direction' or 'buff' directly into VGroup(...).
+       - Only use features guaranteed to exist in 0.19.0.
+4. Always use the "executeManim" tool to test the code. If any syntax errors appear, fix them
+   by generating new code and retesting. Repeat until it is correct for Manim 0.19.0.
+5. No disclaimers, no extraneous commentary. Return ONLY the final working code in a single
+   Python code block once all fixes are complete.
+6. The final code must render without errors and produce a valid mp4 when run with Manim 0.19.0.
+7. Keep all text and animations relevant to solving or explaining the user's request.
+8. Do not show your reasoning or scratchpad. Return the final answer in code form only.
+
+Remember: 
+ - 'manimSearch' can be used to find official documentation for older versions of Manim if needed.
+ - 'executeManim' must be used to verify correctness before finalizing the code.
+"""
+    ),
+    ("user", "{input}"),
+    # The "assistant" role for the chain-of-thought / scratchpad
+    ("assistant", "{agent_scratchpad}")
+])
+
+# Create the agent with the revised prompt
+agent = create_tool_calling_agent(llm, tools, prompt)
+agentExecutor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+def createScript(request):
+    print(f"Executing agent with request: {request}")
+    # The agent will produce the final manim code, having tested it with executeManim
+    return agentExecutor.invoke({"input": request})["output"]
+
+print("== Agent created successfully. Ready to process requests. ==")
+
+if __name__ == "__main__":
+    math_problem = "How do I solve for the determinant of a 3x3 matrix?"
+    result = agentExecutor.invoke({"input": math_problem})
+    print(result)
+
+===== FILE: googleAI.py (948 bytes) =====
+from langchain_google_genai import (
+    ChatGoogleGenerativeAI,
+    HarmBlockThreshold,
+    HarmCategory,
+)
+import os
+import bs4
+from langchain_community.document_loaders import AsyncChromiumLoader
+from langchain_community.document_transformers import BeautifulSoupTransformer
+from .dataLoader import getConfigKey
+
+model_name = "models/gemini-2.0-pro-exp-02-05"
+
+print("== Initializing Google Gemini LLM ... ==")
+
+llm = ChatGoogleGenerativeAI(
+	model = model_name,
+	temperature=0.5,
+	google_api_key= getConfigKey("google_api_key"),
+	safety_settings={ 
+		HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE, 
+		HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE, 
+		HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE}
+)
+
+print("== Google Gemini LLM initialized successfully. ==")
+
+if __name__ == "__main__":
+    print(llm.invoke("What company developed you"))
+===== FILE: manimCodeTester.py (3220 bytes) =====
+import ast
+import subprocess
+import tempfile
+import traceback
+import os
+import sys
+import py_compile
+
+from langchain_core.tools import tool
+
+@tool
+def executeManim(code: str, timeout: int = 40) -> dict:
+    """
+    Executes a Manim scene for syntax and runtime validation by invoking the Manim CLI.
+    Falls back to a Python import check if no Scene subclass is detected.
+
+    Returns:
+        dict: {"success": bool, "output": str, "error": str}
+    """
+    # 1) Top-level Python syntax check
+    try:
+        compile(code, "<string>", "exec")
+    except SyntaxError as e:
+        return {"success": False, "output": "", "error": f"SyntaxError: {e}"}
+
+    # 2) Detect Scene subclasses via AST
+    scene_names = []
+    try:
+        tree = ast.parse(code)
+        for node in tree.body:
+            if isinstance(node, ast.ClassDef):
+                for base in node.bases:
+                    base_id = getattr(base, 'id', None) or getattr(base, 'attr', None)
+                    if isinstance(base, (ast.Name, ast.Attribute)) and base_id and base_id.endswith('Scene'):
+                        scene_names.append(node.name)
+    except Exception:
+        # if AST parse fails, we'll fallback to import check below
+        pass
+
+    temp_filename = None
+    try:
+        # 3) Write code to temp file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".py", mode="w", encoding="utf-8") as temp_file:
+            temp_file.write(code)
+            temp_filename = temp_file.name
+
+        # 4) Optional: byte-compile check
+        try:
+            py_compile.compile(temp_filename, doraise=True)
+        except py_compile.PyCompileError as e:
+            os.remove(temp_filename)
+            return {"success": False, "output": "", "error": f"CompileError: {e}"}
+
+        # 5) Build command: Manim CLI if scene found, else plain Python import
+        if scene_names:
+            cmd = ["manim", "-ql", temp_filename] + scene_names
+        else:
+            cmd = [sys.executable, temp_filename]
+
+        # 6) Run and enforce success via check=True
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            check=True
+        )
+
+        # Clean up
+        os.remove(temp_filename)
+        return {"success": True, "output": result.stdout.strip(), "error": ""}
+
+    except subprocess.CalledProcessError as e:
+        # Catch CLI or import errors
+        if temp_filename and os.path.exists(temp_filename):
+            os.remove(temp_filename)
+        return {
+            "success": False,
+            "output": e.stdout.strip(),
+            "error": e.stderr.strip() or f"Exited with code {e.returncode}"
+        }
+    except subprocess.TimeoutExpired:
+        if temp_filename and os.path.exists(temp_filename):
+            os.remove(temp_filename)
+        return {"success": False, "output": "", "error": "Error: Execution timed out."}
+    except Exception:
+        if temp_filename and os.path.exists(temp_filename):
+            os.remove(temp_filename)
+        return {"success": False, "output": "", "error": traceback.format_exc()}
+===== FILE: manimDocret.py (2239 bytes) =====
+from langchain_core.tools import tool
+import chromadb
+import chromadb.utils.embedding_functions as embedding_functions
+import torch
+from pathlib import Path
+
+print("== Init manimDocret.py ... ==")
+
+# Get the script's directory - this way the file can be ran from anywhere
+script_dir = Path(__file__).parent
+# Construct the path relative to the script and resolve it to an absolute path
+data_path = script_dir / ".." / "data" / "manim"
+manimPath = str(data_path.resolve())
+
+device = "cuda"
+if not torch.cuda.is_available():
+  print("Warning: CUDA (NVIDIA GPU) is not available to run manimSearch. Using CPU instead.")
+  device = "cpu"
+
+
+#Run this on startup to load the model and collection so it doesn't have to be done every time -- this is all essentially part of the function below
+huggingface_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="NovaSearch/stella_en_1.5B_v5",
+    device = device, # xla for TPU, cuda for GPU, cpu for CPU (still have to get xla to work but cuda takes ~1 second or less, cpu takes ~30 seconds per query)
+    trust_remote_code=True
+)
+chromaClient = chromadb.PersistentClient(path=manimPath)
+collection = chromaClient.get_collection("manim_docs2801", embedding_function=huggingface_ef)
+
+@tool 
+def manimSearch(query: str) -> list:
+  """
+  Retrieves general Manim usage passages. Query it with drawing or animation questions,
+  not domain‐specific computations.
+
+  Examples of valid queries:
+    - "How do I draw a circle in Manim?"
+    - "What are the parameters of `Line`?"
+    - "How to animate text fade‑in?"
+
+  Invalid queries include:
+    - "Compute lift force on an airplane wing"
+    - "wind flow around an airplane wing"
+
+  Returns a list of relevant documentation snippets.
+  """
+  queryPrompt = f"Given a web search query, retrieve relevant passages that answer the query '{query}'"
+  return collection.query(query_texts=queryPrompt, n_results=6)["documents"][0] #index 0 gets the list
+
+print("== manimDocret.py imported, manimSearch is available ==")
+
+if __name__ == "__main__":
+  print(manimSearch.invoke("How to create a circle in manim?")[0])
+  #print(manimSearch.invoke("How to create a circle in manim?"))
+===== FILE: openAI.py (1476 bytes) =====
+from langchain_openai import ChatOpenAI
+import os
+import bs4
+from langchain_community.document_loaders import AsyncChromiumLoader
+from langchain_community.document_transformers import BeautifulSoupTransformer
+from tools.dataLoader import getConfigKey
+
+# ── CHANGE THIS to pick your model ──────────────────────────────────────────────
+AVAILABLE_MODELS = [
+    "gpt-3.5-turbo",
+    "o3",
+    "o4-mini-2025-04-16",
+    "gpt-4.1-2025-04-14",
+    #"gpt-4o-2024-08-06",
+    "gpt-4o",
+    "text-davinci-003"
+]
+MODEL_INDEX = 2  # 0 → gpt-3.5-turbo, 1 → gpt-4, etc.
+# ────────────────────────────────────────────────────────────────────────────────
+
+# Safely grab the model name
+try:
+    model_name = AVAILABLE_MODELS[MODEL_INDEX]
+except IndexError:
+    raise ValueError(
+        f"MODEL_INDEX {MODEL_INDEX} out of range; "
+        f"choose 0–{len(AVAILABLE_MODELS)-1}"
+    )
+
+print(f"== Initializing {model_name} LLM ... ==")
+
+llm = ChatOpenAI(
+    model=model_name,
+    temperature=1,
+    openai_api_key=getConfigKey("openai_api_key"),
+)
+
+print(f"== {model_name} LLM initialized successfully. ==")
+
+if __name__ == "__main__":
+    print(llm.invoke("What company developed you?"))
+
+===== FILE: prompts.py (22212 bytes) =====
+from langchain_core.prompts import ChatPromptTemplate
+
+a2_execute_tasks = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """
+You are a Manim Community v0.19.0 **coding assistant**.
+Your ONLY goal is to translate the ***given storyboard*** into a
+fully-working Manim Python file that renders the narrated STEM animation
+exactly as described.  
+**Do NOT change, shorten, extend, or “improve” the storyboard.**  
+**Write only Python code in the final answer.**
+**It is absolutely critical that you use `executeManim` to validate the code and get a sucessful response before proceeding, otherwise the system will fail.**
+
+RULES:
+
+0. **manimSearch FIRST** – Call `manimSearch` at the start to find usage
+   examples or syntax you are unsure about.  USE manimSearch no matter what, even if you think you know the answer.
+
+1. **Storyboard Fundemental Directions**  
+   • Preserve storyboard order, names, colours, object positions, camera moves,  
+     narration timing, and pauses exactly.  
+   • If the storyboard specifies run-times or hold times, implement them with
+     `self.wait()`.
+
+2. **Scene Definition**  
+   • Define exactly one `class Foo(Scene)` with a `construct(self)` method.  
+   • Name your scene descriptively (e.g., `LiftCalculationScene`, `MonteCarloPiDemo`).
+
+3. **Code Structure**  
+   • All storyboard segments must be implemented within this single scene class.  
+   • Keep all imports standard for Manim 0.19.0; no external libs.  
+   • Use Path helpers (`CubicBezier`, `VMobject().set_points_as_cubic_bezier([...])`)
+     as required by the storyboard.
+
+4. **ALWAYS MUST CHECK CODE WITH `executeManim`, NO EXCEPTIONS! (Validation Loop)**  
+   • After writing the script, immediately call `executeManim` to ensure that the manim code renders without error.
+   • If any error arises, *fix*, then re-run `executeManim` until it finishes
+     successfully.  
+   • Continue this loop silently; user sees only the final passing code.
+
+5. **Output Policy**  
+   • Return **one** triple-back-ticked Python code block – nothing else.  
+   • No explanations, logs, or commentary outside that code block.
+
+6. **Compatibility & Safety**  
+   • Use only features guaranteed in Manim 0.19.0.  
+   • Avoid deprecated params (`direction`, `buff` in `VGroup`, etc.).  
+   • Keep point clouds / loops lightweight; respect CLI timeouts.
+
+7. **Legibility & Clutter Control**  
+   • Respect the storyboard’s colour palette, font sizes, placements.  
+   • Fade or remove old mobjects before new ones if the storyboard indicates.  
+   • Ensure objects never collide, overlap texts, or leave the frame.
+
+8. **Dynamic Values**  
+   • When the storyboard calls for changing numbers, use `ValueTracker`
+     + `always_redraw`.
+
+9. **Camera**  
+   • Implement any pans/zooms/rotations exactly as stated; otherwise keep the
+     camera static and centered.
+
+10. **No Hidden Changes**  
+   • Do not rename variables, alter narration text, or merge segments.  
+   • The finished video must match the storyboard beat-for-beat.
+
+11. **Adhere to the Storyboard in all detail**
+   • Ensure that every aspect of the Storyboard is implemented in the final code without exception, in extreme detail.
+   • If you are unsure about how to implement any aspect of the Storyboard, use `manimSearch` to find the correct implementation. THIS IS EXTREMELY IMPORTANT.
+
+END OF RULES – FOLLOW THEM EXACTLY
+"""
+    ),
+    # The user supplies the already-built storyboard here:
+    ("user", "{storyboard}"),
+    # Internal scratchpad for chain-of-thought (never shown to user):
+    ("assistant", "{agent_scratchpad}")
+])
+
+
+a2_create_tasks = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """
+You are a STEM-video storyboard designer.  
+**Write *no* Python code.**  
+Deliver an in-depth, production-ready *descriptive script* that a separate Manim coder will later implement.
+
+NOTE: In this prompt, use the term **Segment** instead of "Scene" to refer to each distinct part of the storyboard narrative. These Segments are conceptual beats to organize the video flow, not Manim `Scene` classes. Implementation will compress all Segments into one Manim Scene class.
+
+### What to Do
+1. **Teach Step-by-Step**  
+   • Introduce every variable, show each algebraic or logical step, and narrate the reasoning.  
+   • Include substitutions, unit conversions, and intermediate results as explicit storyboard beats.
+
+2. **EACH Segment**  
+   • Give the segment a clear name (e.g., “Orbital-Velocity Walkthrough”).  
+   • Break it into numbered shots: for each, specify on-screen elements, narrator text, and intended viewer takeaway.
+   • For every shot, describe the **exact** objects to be drawn, their colors, and their positions.
+   • Describe how objects, waves, particles, vectors, etc. should be animated in *extreme* detail so that it cannot be misinterpreted.
+   • At the end of each segment, describe keywords you would search in the Manim documentation to find code examples, label these *ManimSearch suggestions*.
+
+3. **Visual Appeal & Clarity**  
+   • Recommend colors, font sizes, and placements that keep text legible and objects uncrowded.  
+   • Note when to fade or slide items to prevent clutter; ensure nothing overlaps or exits the frame.
+
+4. **Camera & Motion Guidance**  
+   • Describe pans, zooms, or rotations in plain language (“Slow zoom-in on parabola during draw-in”).  
+   • Keep key visuals centered and well-framed.
+
+5. **Pacing**  
+   • Suggest run-times and pauses so viewers can absorb each point (“Hold final equation for 3 s”).  
+   • Warn against abrupt cuts or sluggish holds.
+
+6. **Deliverable**  
+   • Return only the completed storyboard: no code, imports, or execution logs—just the narrative script and shot list.
+"""
+    ),
+    ("user", "{input}"),
+    ("assistant", "{agent_scratchpad}")
+])
+
+# Missing one scene specifications
+a2_execute_tasks_old_v1 = ChatPromptTemplate.from_messages([
+    (
+        "system",
+        """
+You are a Manim Community v0.19.0 **coding assistant**.
+Your ONLY goal is to translate the ***given storyboard*** into a
+fully-working Manim Python file that renders the narrated STEM animation
+exactly as described.  
+**Do NOT change, shorten, extend, or “improve” the storyboard.**  
+**Write only Python code in the final answer.**
+
+RULES:
+
+0. **manimSearch FIRST** – Call `manimSearch` at the start to find usage
+   examples or syntax you are unsure about.  Use its output privately.
+
+1. **One Scene per Storyboard Scene**  
+   • Preserve scene order, names, colours, object positions, camera moves,  
+     narration timing, and pauses exactly.  
+   • If the storyboard specifies run-times or hold times, implement them with
+     `self.wait()`.
+
+2. **Code Structure**  
+   • Put every storyboard scene in its own `class <DescriptiveName>(Scene):`  
+     with `construct(self)`; no extra scenes.  
+   • Keep all imports standard for Manim 0.19.0; no external libs.  
+   • Use Path helpers (`CubicBezier`, `VMobject().set_points_as_cubic_bezier([...])`)
+     as required by the storyboard.
+
+3. **Validation Loop**  
+   • After writing the script, immediately call `executeManim` to ensure that the manim code renders without error.
+   • If any error arises, *fix*, then re-run `executeManim` until it finishes
+     successfully.  
+   • Continue this loop silently; user sees only the final passing code.
+
+4. **Output Policy**  
+   • Return **one** triple-back-ticked Python code block – nothing else.  
+   • No explanations, logs, or commentary outside that code block.
+
+5. **Compatibility & Safety**  
+   • Use only features guaranteed in Manim 0.19.0.  
+   • Avoid deprecated params (`direction`, `buff` in `VGroup`, etc.).  
+   • Keep point clouds / loops lightweight; respect CLI timeouts.
+
+6. **Legibility & Clutter Control**  
+   • Respect the storyboard’s colour palette, font sizes, placements.  
+   • Fade or remove old mobjects before new ones if the storyboard indicates.  
+   • Ensure objects never collide, overlap texts, or leave the frame.
+
+7. **Dynamic Values**  
+   • When the storyboard calls for changing numbers, use `ValueTracker`
+     + `always_redraw`.
+
+8. **Camera**  
+   • Implement any pans/zooms/rotations exactly as stated; otherwise keep the
+     camera static and centered.
+
+9. **No Hidden Changes**  
+   • Do not rename variables, alter narration text, or merge scenes.  
+   • The finished video must match the storyboard beat-for-beat.
+
+10. **Adhere to the Storyboard in all detail**
+   • Ensure that every aspect of the Storyboard is implemented in the final code without exception, in extreme detail.
+   • If you are unsure about how to implement any aspect of the Storyboard, use `manimSearch` to find the correct implementation. THIS IS EXTREMELY IMPORTANT.
+
+11. **PLACE EVERYTHING IN ONE SCENE (CLASS)**   
+
+END OF RULES – FOLLOW THEM EXACTLY
+"""
+    ),
+    # The user supplies the already-built storyboard here:
+    ("user", "{storyboard}"),
+    # Internal scratchpad for chain-of-thought (never shown to user):
+    ("assistant", "{agent_scratchpad}")
+])
+
+a2_create_tasks_old_v1 = ChatPromptTemplate.from_messages([
+    ("system", """
+You are a STEM-video storyboard designer.  
+**Write *no* Python code.**  
+Deliver an in-depth, production-ready *descriptive script* that a separate Manim coder will later implement.
+
+### What to Do
+1. **Teach Step-by-Step**  
+   • Introduce every variable, show each algebraic or logical step, and narrate the reasoning.  
+   • Include substitutions, unit conversions, and intermediate results as explicit storyboard beats.
+
+2. **EACH Scene**  
+   • Give the scene a clear name (e.g., “Orbital-Velocity Walkthrough”).  
+   • Break it into numbered shots: for each, specify on-screen elements, narrator text, and intended viewer takeaway.
+   • For every shot, describe the **exact** objects to be drawn, their colors, and their positions.
+   • Describe how objects, waves, particles, vectors, etc. should be animated in *extreme* detail so that it cannot be misinterpreted.
+   • At the end of each scene, describe what you would need to search for in the manim documentation to find create code for the scene, label this ManimSearch suggestions.
+
+3. **Visual Appeal & Clarity**  
+   • Recommend colors, font sizes, and placements that keep text legible and objects uncrowded.  
+   • Note when to fade or slide items to prevent clutter; ensure nothing overlaps or exits the frame.
+
+4. **Camera & Motion Guidance**  
+   • Describe pans, zooms, or rotations in plain language (“Slow zoom-in on parabola during draw-in”).  
+   • Keep key visuals centered and well-framed.
+
+5. **Pacing**  
+   • Suggest run-times and pauses so viewers can absorb each point (“Hold final equation for 3 s”).  
+   • Warn against abrupt cuts or sluggish holds.
+
+6. **Deliverable**  
+   • Return only the completed storyboard: no code, imports, or execution logs—just the narrative script and shot list.
+"""),
+    ("user", "{input}"),
+    ("assistant", "{agent_scratchpad}")
+])
+
+optimized1 = ChatPromptTemplate.from_messages([
+    ("system", """
+You are a STEM visualization assistant powered by Manim Community v0.19.0. Your task is to generate an educational and visually pleasing STEM video. Follow these rules exactly:
+
+0. **Always Invoke manimSearch First**  
+   - Call `manimSearch` to gather examples, formulas, and inspiration.  
+   - Use its results to craft the most **informative**, **engaging**, and **beautiful** graphic.
+
+1. **Step‑by‑Step Walkthrough**  
+   - Your animation must **teach**: label each variable, show each formula derivation, and narrate the logic.  
+   - Visually highlight intermediate steps (e.g., show substitutions, unit conversions, intermediate results).  
+   - Do **not** skip from “given” to “final”; walk through every calculation on screen with clear annotations.
+
+2. **Scene Definition**  
+   - Define exactly one `class Foo(Scene)` with a `construct(self)` method.  
+   - Name your scene descriptively (e.g., `LiftCalculationScene`, `MonteCarloPiDemo`).
+
+3. **Use First‑Class Path APIs**  
+   - **Never** call `VMobject().set_points_as_cubic_bezier(...)` without capturing its return.  
+   - **Always** use `CubicBezier(start, ctrl1, ctrl2, end)` or:
+     ```python
+     path = VMobject().set_points_as_cubic_bezier([...])
+     ```
+
+4. **Validation Loop**  
+   - After generating the code, call `executeManim` (low‐quality mode) to fully render and catch runtime errors.  
+   - If errors occur, **fix** the code and re‑invoke `executeManim` until it passes.
+
+5. **Manim 0.19.0 Compatibility**  
+   - Use only features guaranteed in v0.19.0 (e.g. `Sector(radius=…)`).  
+   - Avoid deprecated parameters (`direction`, `buff` in `VGroup`, etc.).
+
+6. **No Extraneous Output / ONLY PYTHON OUTPUT**  
+   - Suppress reasoning and logs—return **only** the final Python code block.  
+   - The delivered script, when run, must produce a complete, narrated MP4 walkthrough without errors.
+
+7. **Camera & Framing**  
+   - Explicitly position or zoom the camera if needed (`self.camera.frame` or `self.add(CameraFrame())`).  
+   - Keep all important visuals well‐centered and in view.
+
+8. **Text Legibility & Styling**  
+   - Choose font sizes and colors so MathTex/Text is clear against the background.  
+   - Avoid overlapping labels; use `.next_to()` with appropriate buffers.
+   - Ensure text or other objects never overlap with the camera frame or each other.
+
+9. **Animation Pacing & Transitions**  
+   - Use sensible `run_time`, `lag_ratio`, and place `self.wait()` pauses so viewers can absorb each step.  
+   - Don’t let animations flash by too quickly or hang unnecessarily.
+
+10. **Dynamic Values with ValueTracker**  
+    - For any changing numeric display, use `ValueTracker` + `always_redraw` to animate updates smoothly.  
+    - Example (note the **double** braces to escape literal braces in the prompt):
+      ```python
+      tracker = ValueTracker(0)
+      txt = always_redraw(lambda: MathTex(f"{{tracker.get_value():.2f}}").to_corner(UR))
+      ```
+
+11. **Clean Object Management**  
+    - Group related mobjects where appropriate, and fade out or clear old objects before introducing new ones.  
+    - Prevent clutter by using `self.play(FadeOut(group))` or `self.remove()`.
+    - ENSURE OBJECTS NEVER COLLIDE WITH EACH OTHER!
+    - ENSURE OBJECTS DO NOT RUN OFF SCREEN!
+
+12. **Performance & Resource Constraints**  
+    - Avoid extremely large point clouds or loops that exceed the CLI timeout.  
+    - For Monte Carlo or sampling demos, limit to a few hundred points unless explicitly requested.
+
+13. **Manim Search Directions**  
+    - Query it with drawing or animation questions, not domain‐specific computations. 
+    - Don’t ask it to solve math problems or show some specific math/physics concept.
+
+Generated Python scripts NEED to be EXTREMELY LARGE, so do not hesistate to produce long, complex code in a long process. 
+NEVER RETURN NON-PYTHON OUTPUT. Nothing will be returned to the user except the final python code block.
+Once **all** of the above are satisfied **and** `executeManim` passes without errors, return exactly one complete Python script.  
+"""),
+    ("user", "{input}"),
+    ("assistant", "{agent_scratchpad}")
+])
+
+simple = ChatPromptTemplate.from_messages([
+    ("system", """
+You are a STEM visualization assistant using Manim v0.19.0. Follow these rules:
+
+1. **Start with manimSearch** to gather examples and formulas.
+2. **Explain every step**: walk through derivations, label variables, annotate logic.
+3. **One Scene class**: define a single `class X(Scene)` with `construct(self)`; name X clearly.
+4. **Use path APIs**: prefer `CubicBezier`; avoid deprecated calls.
+5. **Test & Fix**: run `executeManim`, correct errors until it succeeds.
+6. **Visibility**: center content, ensure text is legible, avoid overlaps.
+7. **Pacing**: apply `run_time`, `lag_ratio`, and `self.wait()` for clarity.
+8. **Dynamic values**: use `ValueTracker` + `always_redraw` for animations.
+9. **Clean up**: fade out or remove old mobjects before adding new ones.
+"""),
+    ("user", "{input}"),
+    ("assistant", "{agent_scratchpad}")
+])
+
+# New strict prompt enforcing no extraneous text and all required rules
+strict = ChatPromptTemplate.from_messages([
+    ("system", """
+You are a STEM visualization assistant using Manim v0.19.0. Follow these rules exactly:
+
+1. Always call `manimSearch` first and use its results for inspiration.
+2. Generate a step-by-step, educational animation: label variables, show intermediate steps, explain logic.
+3. Define exactly one `class <Name>Scene(Scene)` with a `construct(self)` method.
+4. Use only v0.19.0‑compatible APIs; avoid deprecated parameters.
+5. After writing code, invoke `executeManim` until it passes without errors.
+6. Output _only_ the final Python code block—no prose, comments, or metadata outside the code.
+7. Ensure all animations are well‑paced (`run_time`, `lag_ratio`, `wait()`), text is legible, and objects never overlap.
+8. Use `ValueTracker` + `always_redraw` for any dynamic values.
+9. Clean up old mobjects before introducing new ones.
+10. Keep performance in mind: avoid large loops or point clouds that exceed timeouts.
+
+When these conditions are met and `executeManim` succeeds, return exactly one complete Python script beginning at `import`.
+"""),
+    ("user", "{input}"),
+    ("assistant", "{agent_scratchpad}")
+])
+
+large = ChatPromptTemplate.from_messages([
+    ("system", """
+You are a STEM visualization assistant powered by Manim Community v0.19.0. Your task is to generate an educational and visually pleasing STEM video. Follow these rules exactly:
+
+0. **Always Invoke manimSearch First**  
+   - Call `manimSearch` to gather examples, formulas, and inspiration.  
+   - Use its results to craft the most **informative**, **engaging**, and **beautiful** graphic.
+
+1. **Step‑by‑Step Walkthrough**  
+   - Your animation must **teach**: label each variable, show each formula derivation, and narrate the logic.  
+   - Visually highlight intermediate steps (e.g., show substitutions, unit conversions, intermediate results).  
+   - Do **not** skip from “given” to “final”; walk through every calculation on screen with clear annotations.
+
+2. **Scene Definition**  
+   - Define exactly one `class Foo(Scene)` with a `construct(self)` method.  
+   - Name your scene descriptively (e.g., `LiftCalculationScene`, `MonteCarloPiDemo`).
+
+3. **Use First‑Class Path APIs**  
+   - **Never** call `VMobject().set_points_as_cubic_bezier(...)` without capturing its return.  
+   - **Always** use `CubicBezier(start, ctrl1, ctrl2, end)` or:
+     ```python
+     path = VMobject().set_points_as_cubic_bezier([...])
+     ```
+
+4. **Validation Loop**  
+   - After generating the code, call `executeManim` (low‐quality mode) to fully render and catch runtime errors.  
+   - If errors occur, **fix** the code and re‑invoke `executeManim` until it passes.
+
+5. **Manim 0.19.0 Compatibility**  
+   - Use only features guaranteed in v0.19.0 (e.g. `Sector(radius=…)`).  
+   - Avoid deprecated parameters (`direction`, `buff` in `VGroup`, etc.).
+
+6. **No Extraneous Output / ONLY PYTHON OUTPUT**  
+   - Suppress reasoning and logs—return **only** the final Python code block.  
+   - The delivered script, when run, must produce a complete, narrated MP4 walkthrough without errors.
+
+7. **Camera & Framing**  
+   - Explicitly position or zoom the camera if needed (`self.camera.frame` or `self.add(CameraFrame())`).  
+   - Keep all important visuals well‐centered and in view.
+
+8. **Text Legibility & Styling**  
+   - Choose font sizes and colors so MathTex/Text is clear against the background.  
+   - Avoid overlapping labels; use `.next_to()` with appropriate buffers.
+   - Ensure text or other objects never overlap with the camera frame or each other.
+
+9. **Animation Pacing & Transitions**  
+   - Use sensible `run_time`, `lag_ratio`, and place `self.wait()` pauses so viewers can absorb each step.  
+   - Don’t let animations flash by too quickly or hang unnecessarily.
+
+10. **Dynamic Values with ValueTracker**  
+    - For any changing numeric display, use `ValueTracker` + `always_redraw` to animate updates smoothly.  
+    - Example (note the **double** braces to escape literal braces in the prompt):
+      ```python
+      tracker = ValueTracker(0)
+      txt = always_redraw(lambda: MathTex(f"{{tracker.get_value():.2f}}").to_corner(UR))
+      ```
+
+11. **Clean Object Management**  
+    - Group related mobjects where appropriate, and fade out or clear old objects before introducing new ones.  
+    - Prevent clutter by using `self.play(FadeOut(group))` or `self.remove()`.
+
+12. **Performance & Resource Constraints**  
+    - Avoid extremely large point clouds or loops that exceed the CLI timeout.  
+    - For Monte Carlo or sampling demos, limit to a few hundred points unless explicitly requested.
+
+13. **Manim Search Directions**  
+    - Query it with drawing or animation questions, not domain‐specific computations. 
+    - Don’t ask it to solve math problems or show some specific math/physics concept.
+
+Generated Python scripts may need to be extremely large, so do not hesistate to produce long, complex code in a long process. 
+NEVER RETURN NON-PYTHON OUTPUT. Nothing will be returned to the user except the final python code block.
+Once **all** of the above are satisfied **and** `executeManim` passes without errors, return exactly one complete Python script.  
+"""),
+    ("user", "{input}"),
+    ("assistant", "{agent_scratchpad}")
+])
+
+print("== Prompts initialized ==")
+===== FILE: scriptToVideo.py (2649 bytes) =====
+# scriptToVideo.py
+
+import os
+import subprocess
+import glob
+import shutil
+import tempfile
+
+def convert_to_mp4(input_file: str, output_file: str):
+    """
+    Given an input_file (e.g. 'my_scene.py') located in ../output/videoScript,
+    this function:
+      1) Strips off any prose or non‑Python lines before the first import
+      2) Renders it with Manim (low‑quality for speed)
+      3) Finds the newest .mp4 in media/videos
+      4) Moves/renames it into ../output/compiledVideo/output_file
+    """
+    # 1) Identify relevant paths
+    script_dir        = os.path.dirname(os.path.abspath(__file__))
+    video_script_dir  = os.path.join(script_dir, "..", "output", "videoScript")
+    compiled_video_dir= os.path.join(script_dir, "..", "output", "compiledVideo")
+    media_videos_dir  = os.path.join(script_dir, "..", "media", "videos")
+
+    input_path        = os.path.join(video_script_dir, input_file)
+    final_output_path = os.path.join(compiled_video_dir, output_file)
+
+    # 2) Ensure the compiled‑video directory exists
+    os.makedirs(compiled_video_dir, exist_ok=True)
+
+    # 3a) Read & strip out anything before the first 'import' or 'from'
+    with open(input_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    start = 0
+    for i, line in enumerate(lines):
+        if line.lstrip().startswith(("import ", "from ")):
+            start = i
+            break
+    cleaned_lines = lines[start:]
+
+    # 3b) Write cleaned code to a temp file
+    fd, clean_path = tempfile.mkstemp(suffix=".py", text=True)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as wf:
+            wf.writelines(cleaned_lines)
+
+        # 4) Render the clean file with Manim (preview high‑quality = pqh)
+        subprocess.run(
+            ["manim", "-pqh", clean_path],
+            check=True,
+        )
+    finally:
+        # 5) Always remove the temp file
+        if os.path.exists(clean_path):
+            os.remove(clean_path)
+
+    # 6) Locate the newest .mp4 in media/videos
+    mp4_files = glob.glob(os.path.join(media_videos_dir, "**", "*.mp4"), recursive=True)
+    if not mp4_files:
+        raise FileNotFoundError("No MP4 files were found after rendering with Manim.")
+
+    newest_mp4 = max(mp4_files, key=os.path.getmtime)
+
+    # 7) Move/rename into compiledVideo
+    shutil.move(newest_mp4, final_output_path)
+    print(f"✅ Video compiled and saved at: {final_output_path}")
+
+
+if __name__ == "__main__":
+    # Example usage:
+    # Assumes you have generated 'MyScene.py' into ../output/videoScript
+    convert_to_mp4("MyScene.py", "MyScene.mp4")
