@@ -5,3 +5,5 @@ config.json
 *.pyc
 /tools/__pycache__
 media
+/output
+/streamlit/media

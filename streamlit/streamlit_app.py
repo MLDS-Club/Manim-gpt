@@ -8,6 +8,10 @@ import uuid
 
 
 #Setup directories to import tools
+
+os.environ["STREAMLIT_HIDE_TOP_BAR"] = "true"
+os.environ["TOKENIZERS_PARALLELISM"] = "false" 
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
 if PROJECT_ROOT not in sys.path:
@@ -56,6 +60,7 @@ if generate_btn:
 
     with st.spinner("Generating Manim script …"):
         script_text = agent.createScript(prompt)
+        clean_script = script_text.replace('‐', '-')
         dataSaver.saveVideoScript(script_text, script_path)
 
     #Run manim create video:
@@ -73,7 +78,7 @@ if generate_btn:
 
     time.sleep(0.5)
 
-    st.success("VIDEO IS GENORATED!!")
+    st.success("VIDEO IS GENERATED!!")
 
     #Display the final vidoe
     st.video(latest_mp4)
