@@ -7,9 +7,9 @@ export default function Home() {
     try {
       // need to change the api url accordingly
       const response = await fetch(`http://localhost:3000/generatevideo`);
-      const todos = await response.json();
+      const msg = await response.json();
     } catch (error) {
-      console.error("Error fetching todos:", error);
+      console.error("Error fetching video:", error);
     }
   };
 
