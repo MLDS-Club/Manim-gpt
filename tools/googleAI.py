@@ -7,10 +7,14 @@ import os
 import bs4
 from langchain_community.document_loaders import AsyncChromiumLoader
 from langchain_community.document_transformers import BeautifulSoupTransformer
-from dataLoader import getConfigKey
+from .dataLoader import getConfigKey
+
+model_name = "models/gemini-2.0-pro-exp-02-05"
+
+print("== Initializing Google Gemini LLM ... ==")
 
 llm = ChatGoogleGenerativeAI(
-	model="models/gemini-2.0-pro-exp-02-05",
+	model = model_name,
 	temperature=0.5,
 	google_api_key= getConfigKey("google_api_key"),
 	safety_settings={ 
@@ -18,6 +22,8 @@ llm = ChatGoogleGenerativeAI(
 		HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE, 
 		HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE}
 )
- 
+
+print("== Google Gemini LLM initialized successfully. ==")
+
 if __name__ == "__main__":
     print(llm.invoke("What company developed you"))

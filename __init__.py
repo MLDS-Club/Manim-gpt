@@ -1,0 +1,1 @@
+print(f"== Manim-gpt package initialized. ==")
