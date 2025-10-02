@@ -5,3 +5,4 @@ config.json
 *.pyc
 /tools/__pycache__
 media
+.DS_Store
